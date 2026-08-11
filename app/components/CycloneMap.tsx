@@ -23,7 +23,7 @@ export function CycloneMap({ storm, activePoint }: Props) {
   const forecastLine = useRef<SVGPolylineElement>(null);
   const pointNodes = useRef<(SVGCircleElement | null)[]>([]);
   const rangeNodes = useRef<(SVGPolygonElement | null)[]>([]);
-  const activeNode = useRef<SVGCircleElement>(null);
+  const activeNode = useRef<SVGGElement>(null);
   const activePointRef = useRef(activePoint);
   activePointRef.current = activePoint;
   const [isReady, setIsReady] = useState(false);
@@ -77,8 +77,7 @@ export function CycloneMap({ storm, activePoint }: Props) {
       });
       const active = pixels[activePointRef.current];
       if (active) {
-        activeNode.current?.setAttribute("cx", String(active.x));
-        activeNode.current?.setAttribute("cy", String(active.y));
+        activeNode.current?.setAttribute("transform", `translate(${active.x} ${active.y})`);
       }
     };
     map.fitBounds(bounds, { padding: 90, duration: 0, maxZoom: 5 });
@@ -92,8 +91,7 @@ export function CycloneMap({ storm, activePoint }: Props) {
     const point = storm.track[activePoint];
     if (!map || !point) return;
     const pixel = map.project([point.lng, point.lat]);
-    activeNode.current?.setAttribute("cx", String(pixel.x));
-    activeNode.current?.setAttribute("cy", String(pixel.y));
+    activeNode.current?.setAttribute("transform", `translate(${pixel.x} ${pixel.y})`);
   }, [storm, activePoint]);
 
   return <div className="map-shell" aria-label={`${displayStormName(storm)} 경로 지도`}>
@@ -103,7 +101,15 @@ export function CycloneMap({ storm, activePoint }: Props) {
       <polyline ref={observedLine} className="observed-track" />
       <polyline ref={forecastLine} className="forecast-track" />
       {storm.track.map((point, index) => <circle key={`${point.lng}-${point.lat}-${index}`} ref={(element) => { pointNodes.current[index] = element; }} className={`${point.kind === "forecast" ? "forecast-point" : "observed-point"} ${windIntensity(point.wind)}`} r={point.kind === "forecast" ? 4.5 : 5} />)}
-      <circle ref={activeNode} className="active-point" r="11" />
+      <g ref={activeNode} className="active-point">
+        <circle className="active-point-halo" r="17" />
+        <g className="active-cyclone">
+          <path d="M0 -12C8 -12 13 -6 13 0c0 4-3 7-7 7-3 0-5-2-5-4 0-2 2-4 4-3" />
+          <path d="M10 6c-4 7-12 8-17 4-3-2-4-6-2-9 2-2 5-2 6 0 1 2 0 4-2 4" />
+          <path d="M-10 6c-4-7 0-15 7-16 4-1 7 1 8 5 0 3-2 5-4 4-2 0-3-2-2-4" />
+        </g>
+        <circle className="active-point-eye" r="3.5" />
+      </g>
     </svg>
   </div>;
 }

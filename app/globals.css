@@ -17,7 +17,7 @@ button, select, input { font: inherit; }
 .observed-point { stroke: #69e1ff; }
 .forecast-point { stroke: #ffd166; }
 .intensity-unknown { fill: #2b4351; stroke: #9aafba; }.intensity-depression { fill: #183b51; stroke: #57c7ff; }.intensity-storm { fill: #153e3b; stroke: #43d6a3; }.intensity-severe { fill: #4d4124; stroke: #ffd166; }.intensity-typhoon { fill: #54351e; stroke: #ff9f43; }.intensity-very-strong { fill: #562b3d; stroke: #fb7185; }.intensity-violent { fill: #44275a; stroke: #c77dff; }
-.active-point { fill: #22d08a; stroke: white; stroke-width: 4; filter: drop-shadow(0 0 9px rgba(34, 208, 138, .9)); }
+.active-point { filter: drop-shadow(0 0 10px rgba(34, 208, 138, .95)); }.active-point-halo { fill: rgba(34, 208, 138, .22); stroke: rgba(213, 255, 240, .9); stroke-width: 2; }.active-cyclone { fill: none; stroke: #25d88e; stroke-linecap: round; stroke-width: 4.5; animation: cyclone-spin 3.5s linear infinite; transform-box: fill-box; transform-origin: center; }.active-point-eye { fill: #f7fffc; stroke: #25d88e; stroke-width: 2; }@keyframes cyclone-spin { to { transform: rotate(360deg); } }
 .storm-range { stroke-width: 1.5; }
 .storm-range.wind { fill: rgba(82, 207, 255, .17); stroke: rgba(117, 227, 255, .9); }
 .storm-range.probability { fill: rgba(255, 201, 91, .10); stroke: rgba(255, 211, 115, .82); stroke-dasharray: 6 5; }
