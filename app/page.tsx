@@ -50,14 +50,14 @@ export default function Home() {
   function selectStorm(storm: Storm) { setSelectedId(storm.id); setActivePoint(defaultPoint(storm)); }
   function selectBasin(nextBasin: Basin) { setBasin(nextBasin); const nextStorm = stormYear?.storms.find((storm) => nextBasin === "all" || storm.basin === nextBasin); setSelectedId(nextStorm?.id ?? null); }
 
-  if (!selectedStorm || !stormYear || year === null) return <main className="loading-screen"><h1>태풍 경로·태풍 과거 경로 지도</h1><strong>Cyclone Atlas</strong><span>태풍 기록을 불러오는 중입니다…</span></main>;
+  if (!selectedStorm || !stormYear || year === null) return <main className="loading-screen"><h1>태풍 경로 · 과거 태풍 경로 지도</h1><strong>Typhoon Atlas</strong><span>태풍 기록을 불러오는 중입니다…</span></main>;
   const pointIndex = Math.min(activePoint, selectedStorm.track.length - 1);
   const point = selectedStorm.track[pointIndex];
   return (
     <main className="app-shell">
       <section className="map-area"><CycloneMap storm={selectedStorm} activePoint={activePoint} /></section>
       <aside className={`sidebar ${filtersOpen ? "is-open" : ""}`}>
-        <header className="brand"><span className="brand-mark"><i /><i /><i /></span><h1>Cyclone Atlas<small>태풍 경로 · 태풍 과거 경로 지도</small></h1><button className={`panel-toggle filter-toggle ${filtersOpen ? "is-open" : ""}`} type="button" aria-label={filtersOpen ? "태풍 찾기 닫기" : "태풍 찾기 열기"} title={filtersOpen ? "닫기" : "태풍 찾기"} aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}><b aria-hidden="true" /></button></header>
+        <header className="brand"><span className="brand-mark"><i /><i /><i /></span><h1>Typhoon Atlas<small>태풍 경로 · 과거 태풍 경로 지도</small></h1><button className={`panel-toggle filter-toggle ${filtersOpen ? "is-open" : ""}`} type="button" aria-label={filtersOpen ? "태풍 찾기 닫기" : "태풍 찾기 열기"} title={filtersOpen ? "닫기" : "태풍 찾기"} aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}><b aria-hidden="true" /></button></header>
         <div className="filter-content">
         <div className="filter-row">
           <label><span>연도</span><select value={year} onChange={(event) => setYear(Number(event.target.value))}>{years.map((item) => <option key={item} value={item}>{item}년</option>)}</select></label>

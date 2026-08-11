@@ -1,8 +1,8 @@
-# Cyclone Atlas
+# Typhoon Atlas
 
 전 세계 태풍·허리케인·사이클론의 과거 경로와 현재 예보를 지도에서 탐색하는 웹 앱입니다.
 
-![Cyclone Atlas 화면](docs/cyclone-atlas.png)
+![Typhoon Atlas 화면](docs/cyclone-atlas.png)
 
 ## 주요 기능
 
