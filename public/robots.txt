@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cyclone.conychoi.dev/sitemap.xml
+Sitemap: https://typhoon.conychoi.dev/sitemap.xml

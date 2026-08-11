@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cyclone.conychoi.dev"),
+  metadataBase: new URL("https://typhoon.conychoi.dev"),
   title: "태풍 경로 · 과거 태풍 경로 지도 | Typhoon Atlas",
   description: "태풍 경로, 과거 태풍 경로, 태풍 과거 경로를 연도별 지도에서 확인하세요. 전 세계 태풍·허리케인·사이클론의 관측 경로와 현재 예보를 제공합니다.",
   alternates: { canonical: "/" },
@@ -69,10 +69,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "@id": "https://cyclone.conychoi.dev/#website",
+              "@id": "https://typhoon.conychoi.dev/#website",
               name: "Typhoon Atlas",
               alternateName: ["태풍 경로 지도", "과거 태풍 경로 지도", "태풍 과거 경로 지도"],
-              url: "https://cyclone.conychoi.dev/",
+              url: "https://typhoon.conychoi.dev/",
               inLanguage: "ko-KR",
               description: "태풍 경로, 과거 태풍 경로, 태풍 과거 경로를 연도별로 탐색하는 전 세계 태풍 지도",
             }),
