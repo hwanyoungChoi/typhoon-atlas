@@ -15,7 +15,7 @@
 
 과거 확정 경로는 JMA RSMC Tokyo와 NOAA NHC 자료를 사용하고, 현재·예보 정보는 일본 기상청 방재정보를 사용합니다.
 
-`.github/workflows/update-storm-data.yml`이 매일 공식 원본을 확인하며, 데이터가 변경된 경우에만 `public/data`를 갱신합니다.
+`.github/workflows/update-storm-data.yml`이 3시간마다 공식 원본을 확인하며, 데이터가 변경된 경우에만 `public/data`를 갱신합니다.
 
 ## 개발
 
