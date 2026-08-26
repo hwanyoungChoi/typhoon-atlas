@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://typhoon.conychoi.dev"),
-  title: "태풍 경로 · 과거 태풍 경로 지도 | Typhoon Atlas",
-  description: "태풍 경로, 과거 태풍 경로, 태풍 과거 경로를 연도별 지도에서 확인하세요. 전 세계 태풍·허리케인·사이클론의 관측 경로와 현재 예보를 제공합니다.",
+  title: {
+    default: "태풍 경로 · 과거 태풍 경로 지도 | Typhoon Atlas",
+    template: "%s | Typhoon Atlas",
+  },
+  description: "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별 지도와 표로 확인하세요. 1951년 이후 태풍 전체와 한반도에 접근한 태풍, 역대 최강 태풍 순위를 제공합니다.",
   alternates: { canonical: "/" },
   robots: {
     index: true,
@@ -71,10 +74,18 @@ export default function RootLayout({
               "@type": "WebSite",
               "@id": "https://typhoon.conychoi.dev/#website",
               name: "Typhoon Atlas",
-              alternateName: ["태풍 경로 지도", "과거 태풍 경로 지도", "태풍 과거 경로 지도"],
+              alternateName: ["태풍 경로 지도", "과거 태풍 경로 지도", "역대 태풍 기록"],
               url: "https://typhoon.conychoi.dev/",
               inLanguage: "ko-KR",
-              description: "태풍 경로, 과거 태풍 경로, 태풍 과거 경로를 연도별로 탐색하는 전 세계 태풍 지도",
+              description: "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별로 탐색하는 전 세계 태풍 지도",
+              publisher: { "@type": "Person", name: "최환영" },
+              hasPart: [
+                { "@type": "WebPage", name: "연도별 태풍 경로 아카이브", url: "https://typhoon.conychoi.dev/typhoon" },
+                { "@type": "WebPage", name: "한반도에 접근한 역대 태풍", url: "https://typhoon.conychoi.dev/korea" },
+                { "@type": "WebPage", name: "역대 최강 태풍 순위", url: "https://typhoon.conychoi.dev/ranking" },
+                { "@type": "WebPage", name: "태풍 이름 목록과 사용 이력", url: "https://typhoon.conychoi.dev/names" },
+                { "@type": "WebPage", name: "태풍 정보 읽는 법", url: "https://typhoon.conychoi.dev/guide" },
+              ],
             }),
           }}
         />

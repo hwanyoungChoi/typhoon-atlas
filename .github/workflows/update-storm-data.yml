@@ -23,11 +23,11 @@ jobs:
       - run: npm run data:build
       - name: Commit updated source data
         run: |
-          if git diff --quiet -- public/data; then
+          if git diff --quiet -- public/data app/data/generated; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data
+          git add public/data app/data/generated
           git commit -m "chore: update storm data"
           git push

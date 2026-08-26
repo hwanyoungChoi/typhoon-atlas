@@ -12,7 +12,8 @@
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "data:build": "node scripts/prepare-storm-data.mjs"
+    "data:build": "node scripts/prepare-storm-data.mjs && npm run data:index",
+    "data:index": "node scripts/build-seo-index.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
