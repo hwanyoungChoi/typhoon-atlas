@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { allStorms, stormPath, stormTitle, yearSummaries } from "../../data/seo-index";
 
@@ -33,11 +32,11 @@ export default function TyphoonArchivePage() {
               <ul className="year-grid">
                 {summaries.sort((a, b) => b.year - a.year).map((summary) => (
                   <li key={summary.year}>
-                    <Link href={`/typhoon/${summary.year}`}>
+                    <a href={`/typhoon/${summary.year}`}>
                       <b>{summary.year}년</b>
                       <span>{summary.WP > 0 ? `태풍 ${summary.WP}개` : `허리케인 ${summary.NA + summary.EP}개`}</span>
                       {summary.korea > 0 && <em>한반도 접근 {summary.korea}</em>}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -51,14 +50,14 @@ export default function TyphoonArchivePage() {
           <ul className="link-list">
             {recent.map((storm) => (
               <li key={storm.id}>
-                <Link href={stormPath(storm)}>
+                <a href={stormPath(storm)}>
                   <b>{storm.y}년 {stormTitle(storm)}</b>
                   <span>최근접 약 {storm.kr}km · 최저 {storm.pp ? `${storm.pp}hPa` : "기록 없음"}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
-          <p><Link href="/korea">한반도에 접근한 역대 태풍 전체 보기 →</Link></p>
+          <p><a href="/korea">한반도에 접근한 역대 태풍 전체 보기 →</a></p>
         </section>
       </article>
     </main>

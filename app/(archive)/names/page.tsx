@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { allStorms, stormPath, type IndexedStorm } from "../../data/seo-index";
 import { activeNames, retiredNames } from "../../data/typhoon-names-ko";
@@ -43,7 +42,7 @@ export default function NamesPage() {
                     <td>{entry.name}</td>
                     <td className="name-uses">
                       {entry.storms.length
-                        ? entry.storms.slice(0, 8).map((storm) => <Link key={storm.id} href={stormPath(storm)}>{storm.y}년 {storm.no}</Link>)
+                        ? entry.storms.slice(0, 8).map((storm) => <a key={storm.id} href={stormPath(storm)}>{storm.y}년 {storm.no}</a>)
                         : <span>기록 없음</span>}
                     </td>
                   </tr>
@@ -65,7 +64,7 @@ export default function NamesPage() {
                     <td><b>{entry.korean}</b></td>
                     <td>{entry.name}</td>
                     <td className="name-uses">
-                      {entry.storms.slice(0, 8).map((storm) => <Link key={storm.id} href={stormPath(storm)}>{storm.y}년 {storm.no}</Link>)}
+                      {entry.storms.slice(0, 8).map((storm) => <a key={storm.id} href={stormPath(storm)}>{storm.y}년 {storm.no}</a>)}
                     </td>
                   </tr>
                 ))}
@@ -78,7 +77,7 @@ export default function NamesPage() {
           <h2>우리말 태풍 이름</h2>
           <p>한국이 제출한 이름은 개미, 나리, 장미, 미리내, 노루, 제비, 너구리, 고니, 메기, 독수리입니다. 북한이 제출한 기러기, 도라지, 갈매기, 수리개, 메아리, 소나무, 버들, 노을, 민들레, 날개까지 더하면 우리말 이름은 20개입니다. 태풍 이름 가운데 우리말 비중이 높은 이유입니다.</p>
           <p>이름이 짧고 부르기 쉬워야 하고, 회원국 언어에서 부정적인 뜻이 없어야 한다는 조건이 있습니다. 태풍의 세력을 약하게 하려는 뜻에서 부드러운 이름을 고른다는 이야기가 널리 알려져 있지만, 공식 선정 기준에 그런 항목은 없습니다.</p>
-          <p><Link href="/guide">태풍 번호와 등급 기준 보기 →</Link></p>
+          <p><a href="/guide">태풍 번호와 등급 기준 보기 →</a></p>
         </section>
       </article>
     </main>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { allStorms, formatDate, intensityClass, intensityLabel, knotToMs, stormPath, stormTitle, subName } from "../../data/seo-index";
 
@@ -39,7 +38,7 @@ export default function KoreaPage() {
                 {closest.slice(0, 40).map((storm, rank) => (
                   <tr key={storm.id}>
                     <td>{rank + 1}</td>
-                    <td><Link href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</Link><small>{subName(storm)}</small></td>
+                    <td><a href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</a><small>{subName(storm)}</small></td>
                     <td>약 {storm.kr} km</td>
                     <td>{storm.pp ? `${storm.pp} hPa` : "—"}</td>
                     <td><span className={`chip ${intensityClass(storm.pw)}`}>{storm.pw ? `${storm.pw} kt` : "—"}</span><small>{storm.pw ? `${knotToMs(storm.pw)} m/s` : ""}</small></td>
@@ -61,7 +60,7 @@ export default function KoreaPage() {
                 {strongest.map((storm, rank) => (
                   <tr key={storm.id}>
                     <td>{rank + 1}</td>
-                    <td><Link href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</Link></td>
+                    <td><a href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</a></td>
                     <td>{storm.pp} hPa</td>
                     <td><span className={`chip ${intensityClass(storm.pw)}`}>{intensityLabel(storm.pw)}</span></td>
                     <td>약 {storm.kr} km</td>
@@ -103,7 +102,7 @@ export default function KoreaPage() {
         <section>
           <h2>이 수치를 어떻게 읽어야 하나</h2>
           <p>접근 거리는 태풍 중심의 위치만 본 값입니다. 강풍 반경이 400km를 넘는 대형 태풍이라면 중심이 300km 밖을 지나도 전국이 영향권에 들 수 있고, 반대로 중심이 가까이 지나도 세력이 약해진 뒤라면 피해가 작을 수 있습니다. 실제 대비는 기상청이 발표하는 태풍 정보와 특보를 기준으로 하세요.</p>
-          <p><Link href="/guide">태풍 강도와 크기 기준 알아보기 →</Link></p>
+          <p><a href="/guide">태풍 강도와 크기 기준 알아보기 →</a></p>
         </section>
       </article>
     </main>

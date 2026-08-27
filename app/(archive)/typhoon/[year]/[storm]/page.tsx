@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
@@ -49,7 +48,7 @@ export default async function StormPage({ params }: Params) {
     <main className="doc-main">
       <article className="doc-body">
         <nav className="crumbs">
-          <Link href="/typhoon">연도별 태풍</Link> <span>/</span> <Link href={`/typhoon/${storm.y}`}>{storm.y}년</Link> <span>/</span> {stormTitle(storm)}
+          <a href="/typhoon">연도별 태풍</a> <span>/</span> <a href={`/typhoon/${storm.y}`}>{storm.y}년</a> <span>/</span> {stormTitle(storm)}
         </nav>
 
         <h1>{storm.y}년 {stormTitle(storm)} 경로</h1>
@@ -76,7 +75,7 @@ export default async function StormPage({ params }: Params) {
             <Phase label="마지막 관측" snapshot={storm.d} />
           </div>
           <p>발생부터 소멸까지의 중심 위치는 각국 기상기관이 사후 재분석해 확정한 베스트트랙 값입니다. 실시간 발표 당시의 위치와는 다를 수 있습니다.</p>
-          <p><Link href={`/?year=${storm.y}&storm=${storm.id}`}>지도에서 이 {term} 경로 보기 →</Link></p>
+          <p><a href={`/?year=${storm.y}&storm=${storm.id}`}>지도에서 이 {term} 경로 보기 →</a></p>
         </section>
 
         {track.length > 0 && (
@@ -107,11 +106,11 @@ export default async function StormPage({ params }: Params) {
           <ul className="link-list compact">
             {siblings.map((item) => (
               <li key={item.id} className={item.id === storm.id ? "current" : ""}>
-                <Link href={stormPath(item)}><b>{stormTitle(item)}</b><span>{item.pp ? `${item.pp} hPa` : "기압 기록 없음"}</span></Link>
+                <a href={stormPath(item)}><b>{stormTitle(item)}</b><span>{item.pp ? `${item.pp} hPa` : "기압 기록 없음"}</span></a>
               </li>
             ))}
           </ul>
-          {position >= 0 && <p>{storm.y}년 {basinNames[storm.b]}에서는 모두 {siblings.length}개가 관측됐습니다. <Link href={`/typhoon/${storm.y}`}>{storm.y}년 전체 목록 →</Link></p>}
+          {position >= 0 && <p>{storm.y}년 {basinNames[storm.b]}에서는 모두 {siblings.length}개가 관측됐습니다. <a href={`/typhoon/${storm.y}`}>{storm.y}년 전체 목록 →</a></p>}
         </section>
 
         <script

@@ -35,6 +35,12 @@ const eslintConfig = defineConfig([
         version: "detect",
       },
     },
+    rules: {
+      // vinext's next/link throws "f is not a function" during prefetch setup,
+      // which silently kills the click handler. Plain <a> is the working
+      // navigation primitive here until that is fixed upstream.
+      "@next/next/no-html-link-for-pages": "off",
+    },
   },
 ]);
 

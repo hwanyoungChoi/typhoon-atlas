@@ -21,6 +21,7 @@ export function AtlasExplorer() {
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(true);
+  const [legendOpen, setLegendOpen] = useState(true);
 
   useEffect(() => {
     fetch("/data/years/index.json", { cache: "no-store" })
@@ -70,6 +71,7 @@ export function AtlasExplorer() {
           ? <CycloneMap storm={selectedStorm} activePoint={activePoint} />
           : <div className="map-empty"><p>{year}년 {basinLabels[basin]} 기록이 없습니다.</p><span>해당 시즌이 아직 시작되지 않았거나, 이 해역·연도 조합에 관측된 태풍이 없습니다.</span></div>}
       </section>
+      <div className="left-rail">
       <aside className={`sidebar ${filtersOpen ? "is-open" : ""}`}>
         <header className="brand"><span className="brand-mark"><i /><i /><i /></span><h1>Typhoon Atlas<small>태풍 경로 · 과거 태풍 경로 지도</small></h1><button className={`panel-toggle filter-toggle ${filtersOpen ? "is-open" : ""}`} type="button" aria-label={filtersOpen ? "태풍 찾기 닫기" : "태풍 찾기 열기"} title={filtersOpen ? "닫기" : "태풍 찾기"} aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}><b aria-hidden="true" /></button></header>
         <div className="filter-content">
@@ -78,9 +80,15 @@ export function AtlasExplorer() {
           <label><span>해역</span><select value={basin} onChange={(event) => selectBasin(event.target.value as Basin)}>{Object.entries(basinLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           {selectedStorm && <label className="storm-selector"><span>태풍</span><select value={selectedStorm.id} onChange={(event) => { const storm = availableStorms.find((item) => item.id === event.target.value); if (storm) selectStorm(storm); }}>{availableStorms.map((storm) => <option key={storm.id} value={storm.id}>{storm.status === "active" ? "현재 · " : ""}{storm.number} {displayStormName(storm)} ({storm.name})</option>)}</select></label>}
         </div>
-        {selectedStorm && (
-          <div className="legend-section">
-            <h2>지도 범례</h2>
+        <footer><ArchiveLinks />현재·예보: 일본 기상청 방재정보 · 과거 확정 경로: JMA RSMC Tokyo / NOAA NHC <a href="/privacy">개인정보처리방침</a></footer>
+        </div>
+      </aside>
+      {selectedStorm && (
+        <div className={`legend ${legendOpen ? "is-open" : ""}`}>
+          <button type="button" className="legend-head" aria-expanded={legendOpen} onClick={() => setLegendOpen((open) => !open)}>
+            <span>ⓘ 범례</span><b aria-hidden="true" />
+          </button>
+          <div className="legend-body">
             <ul className="legend-lines">
               <li><span className="line-swatch" />관측·분석 경로</li>
               {selectedStorm.status === "active" && <li><span className="forecast-swatch" />예보 경로</li>}
@@ -94,10 +102,9 @@ export function AtlasExplorer() {
               {intensityScale.map((item) => <li key={item.cls}><span className={`chip ${item.cls}`}>{item.label}</span><small>{item.range}</small></li>)}
             </ul>
           </div>
-        )}
-        <footer><ArchiveLinks />현재·예보: 일본 기상청 방재정보 · 과거 확정 경로: JMA RSMC Tokyo / NOAA NHC <a href="/privacy">개인정보처리방침</a></footer>
         </div>
-      </aside>
+      )}
+      </div>
       {selectedStorm && point && (
         <section className={`storm-panel ${detailsOpen ? "is-open" : ""}`} aria-live="polite">
           <button className="storm-summary" type="button" aria-label={detailsOpen ? "태풍 상세 닫기" : "태풍 상세 보기"} title={detailsOpen ? "닫기" : "상세 보기"} aria-expanded={detailsOpen} onClick={() => setDetailsOpen((open) => !open)}><span className="summary-copy"><i className={selectedStorm.status === "active" ? "active" : ""} /><span><b>{selectedStorm.number} {displayStormName(selectedStorm)}</b><small>{selectedStorm.status === "active" ? "현재 진행 중" : "과거 경로"} · {basinLabels[selectedStorm.basin]}</small></span></span><span className="summary-action"><span>{detailsOpen ? "접기" : "상세"}</span><b aria-hidden="true" /></span></button>

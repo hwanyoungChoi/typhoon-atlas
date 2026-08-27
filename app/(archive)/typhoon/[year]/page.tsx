@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
@@ -45,7 +44,7 @@ export default async function YearPage({ params }: Params) {
   return (
     <main className="doc-main">
       <article className="doc-body">
-        <nav className="crumbs"><Link href="/typhoon">연도별 태풍</Link> <span>/</span> {year}년</nav>
+        <nav className="crumbs"><a href="/typhoon">연도별 태풍</a> <span>/</span> {year}년</nav>
         <h1>{year}년 태풍 경로 기록</h1>
         <p className="lede">
           {year}년에는 전 세계에서 열대저기압 {storms.length}개가 관측됐습니다.
@@ -55,9 +54,9 @@ export default async function YearPage({ params }: Params) {
         </p>
 
         <p className="year-jump">
-          {previous && <Link href={`/typhoon/${previous}`}>← {previous}년</Link>}
-          <Link href="/typhoon">전체 연도</Link>
-          {next && <Link href={`/typhoon/${next}`}>{next}년 →</Link>}
+          {previous && <a href={`/typhoon/${previous}`}>← {previous}년</a>}
+          <a href="/typhoon">전체 연도</a>
+          {next && <a href={`/typhoon/${next}`}>{next}년 →</a>}
         </p>
 
         {basins.map((basin) => {
@@ -73,7 +72,7 @@ export default async function YearPage({ params }: Params) {
                   <tbody>
                     {list.map((storm) => (
                       <tr key={storm.id}>
-                        <td><Link href={stormPath(storm)}>{stormTitle(storm)}</Link><small>{subName(storm)}</small></td>
+                        <td><a href={stormPath(storm)}>{stormTitle(storm)}</a><small>{subName(storm)}</small></td>
                         <td>{formatDate(storm.s)}<small>{storm.e && storm.e !== storm.s ? `~ ${formatDate(storm.e)}` : ""}</small></td>
                         <td><span className={`chip ${intensityClass(storm.pw)}`}>{storm.pw ? `${storm.pw} kt` : "—"}</span><small>{storm.pw ? `${knotToMs(storm.pw)} m/s · ${intensityLabel(storm.pw)}` : "기록 없음"}</small></td>
                         <td>{storm.pp ? `${storm.pp} hPa` : "—"}</td>
@@ -90,7 +89,7 @@ export default async function YearPage({ params }: Params) {
         <section>
           <h2>표를 읽는 법</h2>
           <p>최대 풍속은 베스트트랙에 기록된 값입니다. 북서태평양은 일본 기상청 기준 10분 평균 풍속, 북대서양·북동태평양은 미국 기준 1분 평균 풍속이라 같은 숫자라도 해역 사이 직접 비교는 어렵습니다. 한반도 최근접은 관측된 중심 위치와 한반도 주요 지점 사이의 최단 거리이며, 상륙 여부나 피해 규모를 뜻하지 않습니다.</p>
-          <p><Link href="/guide">태풍 등급과 단위 자세히 보기 →</Link></p>
+          <p><a href="/guide">태풍 등급과 단위 자세히 보기 →</a></p>
         </section>
       </article>
     </main>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { allStorms, builtAt, yearSummaries } from "../../data/seo-index";
 
@@ -42,7 +41,7 @@ export default function AboutPage() {
         <section>
           <h2>만든 사람과 문의</h2>
           <p>프론트엔드 개발자 최환영이 만들고 운영합니다. 자료 오류나 개선 제안은 <a href="mailto:welcomechoi@kakao.com">welcomechoi@kakao.com</a>으로 보내주세요. 다른 작업 기록은 <a href="https://conychoi.dev" rel="noreferrer">conychoi.dev</a>에 있습니다.</p>
-          <p><Link href="/privacy">개인정보처리방침</Link></p>
+          <p><a href="/privacy">개인정보처리방침</a></p>
         </section>
       </article>
     </main>

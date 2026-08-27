@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import {
   allStorms, basinNames, basinTerms, formatDate, intensityClass, intensityLabel,
@@ -34,7 +33,7 @@ export default function RankingPage() {
                 {global.map((storm, rank) => (
                   <tr key={storm.id}>
                     <td>{rank + 1}</td>
-                    <td><Link href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</Link><small>{subName(storm)}</small></td>
+                    <td><a href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</a><small>{subName(storm)}</small></td>
                     <td><b>{storm.pp} hPa</b></td>
                     <td><span className={`chip ${intensityClass(storm.pw)}`}>{storm.pw ? `${storm.pw} kt` : "—"}</span><small>{storm.pw ? `${knotToMs(storm.pw)} m/s` : ""}</small></td>
                     <td>{basinNames[storm.b]}</td>
@@ -59,7 +58,7 @@ export default function RankingPage() {
                     {list.map((storm, rank) => (
                       <tr key={storm.id}>
                         <td>{rank + 1}</td>
-                        <td><Link href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</Link></td>
+                        <td><a href={stormPath(storm)}>{storm.y}년 {stormTitle(storm)}</a></td>
                         <td>{storm.pp} hPa</td>
                         <td><span className={`chip ${intensityClass(storm.pw)}`}>{intensityLabel(storm.pw)}</span></td>
                         <td>{storm.kr !== null && storm.kr <= 1500 ? `약 ${storm.kr} km` : "먼 해상"}</td>
@@ -78,10 +77,10 @@ export default function RankingPage() {
           <ul className="link-list">
             {longest.map((storm) => (
               <li key={storm.id}>
-                <Link href={stormPath(storm)}>
+                <a href={stormPath(storm)}>
                   <b>{storm.y}년 {stormTitle(storm)}</b>
                   <span>{storm.c}회 관측 · {basinNames[storm.b]}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

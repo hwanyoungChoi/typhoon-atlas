@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "태풍 가이드 — 등급·풍속 단위·진로 읽는 법",
@@ -73,7 +72,7 @@ export default function GuidePage() {
           <h2>이 사이트의 데이터</h2>
           <p>과거 경로는 <b>베스트트랙</b>입니다. 태풍이 지나간 뒤 각국 기상기관이 위성·항공·지상 관측 자료를 다시 검토해 확정한 값이라, 태풍이 오던 당시 실시간으로 발표된 위치·강도와는 차이가 있을 수 있습니다. 북서태평양은 일본 기상청 RSMC Tokyo, 북대서양·북동태평양은 미국 NOAA 국립허리케인센터의 HURDAT2를 사용합니다.</p>
           <p>현재 진행 중인 태풍의 위치와 예보는 일본 기상청 방재정보를 그대로 표시합니다. 이 사이트는 자체 예보를 만들지 않으며, 공식 경보를 대신하지 않습니다. 실제 대비는 <a href="https://www.weather.go.kr/w/typhoon/typ-korea.do" rel="noreferrer" target="_blank">기상청 태풍정보</a>를 기준으로 하세요.</p>
-          <p><Link href="/typhoon">연도별 태풍 기록 보기 →</Link></p>
+          <p><a href="/typhoon">연도별 태풍 기록 보기 →</a></p>
         </section>
       </article>
     </main>
