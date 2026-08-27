@@ -163,3 +163,7 @@ button, select, input { font: inherit; }
 }
 .name-uses { display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .name-uses span { color: #7f9dad; font-size: 12px; }
+
+.map-empty { display: grid; place-content: center; justify-items: center; gap: 8px; height: 100%; padding: 24px; text-align: center; color: #9fb5c1; }
+.map-empty p { margin: 0; color: #d7ebf4; font-size: 17px; font-weight: 650; }
+.map-empty span { max-width: 320px; color: #8da9b8; font-size: 13px; line-height: 1.6; }
