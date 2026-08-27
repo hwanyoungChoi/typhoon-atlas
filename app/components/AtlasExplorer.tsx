@@ -20,7 +20,6 @@ export function AtlasExplorer() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
-  const [detailsOpen, setDetailsOpen] = useState(true);
   const [legendOpen, setLegendOpen] = useState(true);
 
   useEffect(() => {
@@ -62,8 +61,6 @@ export function AtlasExplorer() {
   function selectBasin(nextBasin: Basin) { setBasin(nextBasin); const nextStorm = stormYear?.storms.find((storm) => nextBasin === "all" || storm.basin === nextBasin); setSelectedId(nextStorm?.id ?? null); }
 
   if (!stormYear || year === null) return <main className="loading-screen"><h1>태풍 경로 · 과거 태풍 경로 지도</h1><strong>Typhoon Atlas</strong><span>태풍 기록을 불러오는 중입니다…</span><ArchiveLinks /></main>;
-  const pointIndex = selectedStorm ? Math.min(activePoint, selectedStorm.track.length - 1) : 0;
-  const point = selectedStorm?.track[pointIndex];
   return (
     <main className="app-shell">
       <section className="map-area">
@@ -105,17 +102,6 @@ export function AtlasExplorer() {
         </div>
       )}
       </div>
-      {selectedStorm && point && (
-        <section className={`storm-panel ${detailsOpen ? "is-open" : ""}`} aria-live="polite">
-          <button className="storm-summary" type="button" aria-label={detailsOpen ? "태풍 상세 닫기" : "태풍 상세 보기"} title={detailsOpen ? "닫기" : "상세 보기"} aria-expanded={detailsOpen} onClick={() => setDetailsOpen((open) => !open)}><span className="summary-copy"><i className={selectedStorm.status === "active" ? "active" : ""} /><span><b>{selectedStorm.number} {displayStormName(selectedStorm)}</b><small>{selectedStorm.status === "active" ? "현재 진행 중" : "과거 경로"} · {basinLabels[selectedStorm.basin]}</small></span></span><span className="summary-action"><span>{detailsOpen ? "접기" : "상세"}</span><b aria-hidden="true" /></span></button>
-          <div className="storm-details">
-          <div className="storm-panel-top"><div><span className="eyebrow"><i /> {basinLabels[selectedStorm.basin]}</span><h1>{selectedStorm.number} {displayStormName(selectedStorm)}</h1><p>{selectedStorm.name} · {selectedStorm.dates}</p></div><span className={`status ${selectedStorm.status}`}>{selectedStorm.status === "active" ? "진행 중" : selectedStorm.status === "provisional" ? "속보 분석" : "기록 완료"}</span></div>
-          <p className="storm-record-link"><a href={stormRecordPath(selectedStorm)}>{selectedStorm.number} {displayStormName(selectedStorm)} 상세 기록 보기 →</a></p>
-          <div className="metrics"><div><span>최대 풍속</span><b>{selectedStorm.peakWind ? `${selectedStorm.peakWind} kt` : "기록 없음"}</b></div><div><span>최저 중심기압</span><b>{selectedStorm.peakPressure ? `${selectedStorm.peakPressure} hPa` : "기록 없음"}</b></div></div>
-          <div className="timeline"><div><div><span>{point.kind === "forecast" ? "예보 시점" : "경로 시점"}</span><b>{point.time}</b></div><span>{pointIndex + 1} / {selectedStorm.track.length}</span></div><input aria-label="경로 시점" type="range" min="0" max={selectedStorm.track.length - 1} value={pointIndex} onChange={(event) => setActivePoint(Number(event.target.value))} /><div className="point-details"><span>{point.radiusType === "wind" ? `강풍 경계 약 ${Math.round(point.radiusKm ?? 0)} km` : point.radiusType === "probability" ? `예보 확률 원 약 ${Math.round(point.radiusKm ?? 0)} km` : `풍속 ${point.wind ? `${point.wind} kt` : "—"}`}</span><span>중심기압 {point.pressure ? `${point.pressure} hPa` : "—"}</span></div></div>
-          </div>
-        </section>
-      )}
     </main>
   );
 }
@@ -132,14 +118,6 @@ const intensityScale = [
 function defaultPoint(storm: Storm) {
   const firstForecast = storm.track.findIndex((point) => point.kind === "forecast");
   return firstForecast > 0 ? firstForecast - 1 : storm.track.length - 1;
-}
-
-/** Mirrors `stormSlug` in `app/data/seo-index.ts`. */
-function stormRecordPath(storm: Storm) {
-  const agency = /^[A-Z]{2}\d/.test(storm.id) ? storm.id.slice(0, 2).toLowerCase() : "wp";
-  const number = storm.number.replace(/\D/g, "") || "0";
-  const name = storm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unnamed";
-  return `/typhoon/${storm.year}/${agency}-${number}-${name}`;
 }
 
 function orderStorms(storms: Storm[]) {
