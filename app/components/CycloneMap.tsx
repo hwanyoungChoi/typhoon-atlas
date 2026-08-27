@@ -110,15 +110,9 @@ export function CycloneMap({ storm, activePoint }: Props) {
       ))}
       <polyline ref={forecastLine} className="forecast-track" />
       {storm.track.map((point, index) => <circle key={`${point.lng}-${point.lat}-${index}`} ref={(element) => { pointNodes.current[index] = element; }} className={`${point.kind === "forecast" ? "forecast-point" : "observed-point"} ${windIntensity(point.wind)}`} r={point.kind === "forecast" ? 3 : 3.5} />)}
-      <g ref={activeNode} className={`active-marker ${windIntensity(storm.track[activePoint]?.wind ?? null)}`}>
-        <g className="storm-spiral">
-          <path className="spiral-blade blade-1" d="M17,0 A17 17 0 0 1 -7.18,15.41 A12 12 0 0 0 17,0 Z" />
-          <path className="spiral-blade blade-2" transform="rotate(120)" d="M17,0 A17 17 0 0 1 -7.18,15.41 A12 12 0 0 0 17,0 Z" />
-          <path className="spiral-blade blade-3" transform="rotate(240)" d="M17,0 A17 17 0 0 1 -7.18,15.41 A12 12 0 0 0 17,0 Z" />
-        </g>
-        <circle className="marker-eye" r="3" />
-        <circle className="marker-eye-dot" r="1.3" />
-      </g>
+      {storm.status === "archived" && activePoint === storm.track.length - 1
+        ? <g ref={activeNode} className="active-marker is-end"><line x1="-6" y1="-6" x2="6" y2="6" /><line x1="-6" y1="6" x2="6" y2="-6" /></g>
+        : <g ref={activeNode} className={`active-marker ${windIntensity(storm.track[activePoint]?.wind ?? null)}`}><circle className="marker-dot" r="7" /></g>}
     </svg>
   </div>;
 }

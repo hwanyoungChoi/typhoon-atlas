@@ -22,6 +22,7 @@ export function AtlasExplorer() {
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(true);
+  const [legendOpen, setLegendOpen] = useState(false);
 
   useEffect(() => {
     fetch("/data/years/index.json", { cache: "no-store" })
@@ -93,10 +94,41 @@ export function AtlasExplorer() {
           </div>
         </section>
       )}
-      {selectedStorm && <div className="map-legend"><span className="line-swatch" />관측·분석 경로 {selectedStorm.status === "active" && <><span className="forecast-swatch" />예보 경로 <span className="wind-range-swatch" />강풍 경계 <span className="probability-range-swatch" />70% 확률 원</>} <span className="intensity-swatch" />지점 색 = 풍속 <span className="dot-swatch" />선택 시점</div>}
+      {selectedStorm && (
+        <div className="legend">
+          <button type="button" className={`legend-toggle ${legendOpen ? "is-open" : ""}`} aria-expanded={legendOpen} aria-label={legendOpen ? "범례 닫기" : "범례 보기"} onClick={() => setLegendOpen((open) => !open)}>ⓘ 범례</button>
+          {legendOpen && (
+            <div className="legend-panel">
+              <button type="button" className="legend-close" aria-label="닫기" onClick={() => setLegendOpen(false)}>×</button>
+              <h2>지도 범례</h2>
+              <ul className="legend-lines">
+                <li><span className="line-swatch" />관측·분석 경로</li>
+                {selectedStorm.status === "active" && <li><span className="forecast-swatch" />예보 경로</li>}
+                {selectedStorm.status === "active" && <li><span className="wind-range-swatch" />강풍 경계</li>}
+                {selectedStorm.status === "active" && <li><span className="probability-range-swatch" />70% 확률 원</li>}
+                <li><span className="dot-swatch" />선택 시점</li>
+                <li><svg className="end-swatch" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><line x1="2" y1="2" x2="12" y2="12" /><line x1="2" y1="12" x2="12" y2="2" /></svg>소멸 지점</li>
+              </ul>
+              <h3>태풍 강도 (10분 평균 풍속)</h3>
+              <ul className="legend-intensity">
+                {intensityScale.map((item) => <li key={item.cls}><span className={`chip ${item.cls}`}>{item.label}</span><small>{item.range}</small></li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }
+
+const intensityScale = [
+  { cls: "depression", label: "열대저압부", range: "34kt 미만" },
+  { cls: "storm", label: "열대폭풍", range: "34~47kt" },
+  { cls: "severe", label: "강한 열대폭풍", range: "48~63kt" },
+  { cls: "typhoon", label: "태풍(중)", range: "64~84kt" },
+  { cls: "very-strong", label: "매우 강한 태풍", range: "85~104kt" },
+  { cls: "violent", label: "맹렬한 태풍", range: "105kt 이상" },
+];
 
 function defaultPoint(storm: Storm) {
   const firstForecast = storm.track.findIndex((point) => point.kind === "forecast");
