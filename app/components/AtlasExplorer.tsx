@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -22,7 +21,6 @@ export function AtlasExplorer() {
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(true);
-  const [legendOpen, setLegendOpen] = useState(false);
 
   useEffect(() => {
     fetch("/data/years/index.json", { cache: "no-store" })
@@ -80,7 +78,24 @@ export function AtlasExplorer() {
           <label><span>해역</span><select value={basin} onChange={(event) => selectBasin(event.target.value as Basin)}>{Object.entries(basinLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           {selectedStorm && <label className="storm-selector"><span>태풍</span><select value={selectedStorm.id} onChange={(event) => { const storm = availableStorms.find((item) => item.id === event.target.value); if (storm) selectStorm(storm); }}>{availableStorms.map((storm) => <option key={storm.id} value={storm.id}>{storm.status === "active" ? "현재 · " : ""}{storm.number} {displayStormName(storm)} ({storm.name})</option>)}</select></label>}
         </div>
-        <footer><ArchiveLinks />현재·예보: 일본 기상청 방재정보 · 과거 확정 경로: JMA RSMC Tokyo / NOAA NHC <Link href="/privacy">개인정보처리방침</Link></footer>
+        {selectedStorm && (
+          <div className="legend-section">
+            <h2>지도 범례</h2>
+            <ul className="legend-lines">
+              <li><span className="line-swatch" />관측·분석 경로</li>
+              {selectedStorm.status === "active" && <li><span className="forecast-swatch" />예보 경로</li>}
+              {selectedStorm.status === "active" && <li><span className="wind-range-swatch" />강풍 경계</li>}
+              {selectedStorm.status === "active" && <li><span className="probability-range-swatch" />70% 확률 원</li>}
+              <li><span className="dot-swatch" />선택 시점</li>
+              <li><svg className="end-swatch" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><line x1="2" y1="2" x2="12" y2="12" /><line x1="2" y1="12" x2="12" y2="2" /></svg>소멸 지점</li>
+            </ul>
+            <h3>태풍 강도 (10분 평균 풍속)</h3>
+            <ul className="legend-intensity">
+              {intensityScale.map((item) => <li key={item.cls}><span className={`chip ${item.cls}`}>{item.label}</span><small>{item.range}</small></li>)}
+            </ul>
+          </div>
+        )}
+        <footer><ArchiveLinks />현재·예보: 일본 기상청 방재정보 · 과거 확정 경로: JMA RSMC Tokyo / NOAA NHC <a href="/privacy">개인정보처리방침</a></footer>
         </div>
       </aside>
       {selectedStorm && point && (
@@ -88,34 +103,11 @@ export function AtlasExplorer() {
           <button className="storm-summary" type="button" aria-label={detailsOpen ? "태풍 상세 닫기" : "태풍 상세 보기"} title={detailsOpen ? "닫기" : "상세 보기"} aria-expanded={detailsOpen} onClick={() => setDetailsOpen((open) => !open)}><span className="summary-copy"><i className={selectedStorm.status === "active" ? "active" : ""} /><span><b>{selectedStorm.number} {displayStormName(selectedStorm)}</b><small>{selectedStorm.status === "active" ? "현재 진행 중" : "과거 경로"} · {basinLabels[selectedStorm.basin]}</small></span></span><span className="summary-action"><span>{detailsOpen ? "접기" : "상세"}</span><b aria-hidden="true" /></span></button>
           <div className="storm-details">
           <div className="storm-panel-top"><div><span className="eyebrow"><i /> {basinLabels[selectedStorm.basin]}</span><h1>{selectedStorm.number} {displayStormName(selectedStorm)}</h1><p>{selectedStorm.name} · {selectedStorm.dates}</p></div><span className={`status ${selectedStorm.status}`}>{selectedStorm.status === "active" ? "진행 중" : selectedStorm.status === "provisional" ? "속보 분석" : "기록 완료"}</span></div>
-          <p className="storm-record-link"><Link href={stormRecordPath(selectedStorm)}>{selectedStorm.number} {displayStormName(selectedStorm)} 상세 기록 보기 →</Link></p>
+          <p className="storm-record-link"><a href={stormRecordPath(selectedStorm)}>{selectedStorm.number} {displayStormName(selectedStorm)} 상세 기록 보기 →</a></p>
           <div className="metrics"><div><span>최대 풍속</span><b>{selectedStorm.peakWind ? `${selectedStorm.peakWind} kt` : "기록 없음"}</b></div><div><span>최저 중심기압</span><b>{selectedStorm.peakPressure ? `${selectedStorm.peakPressure} hPa` : "기록 없음"}</b></div></div>
           <div className="timeline"><div><div><span>{point.kind === "forecast" ? "예보 시점" : "경로 시점"}</span><b>{point.time}</b></div><span>{pointIndex + 1} / {selectedStorm.track.length}</span></div><input aria-label="경로 시점" type="range" min="0" max={selectedStorm.track.length - 1} value={pointIndex} onChange={(event) => setActivePoint(Number(event.target.value))} /><div className="point-details"><span>{point.radiusType === "wind" ? `강풍 경계 약 ${Math.round(point.radiusKm ?? 0)} km` : point.radiusType === "probability" ? `예보 확률 원 약 ${Math.round(point.radiusKm ?? 0)} km` : `풍속 ${point.wind ? `${point.wind} kt` : "—"}`}</span><span>중심기압 {point.pressure ? `${point.pressure} hPa` : "—"}</span></div></div>
           </div>
         </section>
-      )}
-      {selectedStorm && (
-        <div className="legend">
-          <button type="button" className={`legend-toggle ${legendOpen ? "is-open" : ""}`} aria-expanded={legendOpen} aria-label={legendOpen ? "범례 닫기" : "범례 보기"} onClick={() => setLegendOpen((open) => !open)}>ⓘ 범례</button>
-          {legendOpen && (
-            <div className="legend-panel">
-              <button type="button" className="legend-close" aria-label="닫기" onClick={() => setLegendOpen(false)}>×</button>
-              <h2>지도 범례</h2>
-              <ul className="legend-lines">
-                <li><span className="line-swatch" />관측·분석 경로</li>
-                {selectedStorm.status === "active" && <li><span className="forecast-swatch" />예보 경로</li>}
-                {selectedStorm.status === "active" && <li><span className="wind-range-swatch" />강풍 경계</li>}
-                {selectedStorm.status === "active" && <li><span className="probability-range-swatch" />70% 확률 원</li>}
-                <li><span className="dot-swatch" />선택 시점</li>
-                <li><svg className="end-swatch" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><line x1="2" y1="2" x2="12" y2="12" /><line x1="2" y1="12" x2="12" y2="2" /></svg>소멸 지점</li>
-              </ul>
-              <h3>태풍 강도 (10분 평균 풍속)</h3>
-              <ul className="legend-intensity">
-                {intensityScale.map((item) => <li key={item.cls}><span className={`chip ${item.cls}`}>{item.label}</span><small>{item.range}</small></li>)}
-              </ul>
-            </div>
-          )}
-        </div>
       )}
     </main>
   );

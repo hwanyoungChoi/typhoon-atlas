@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const links = [
   { href: "/typhoon", label: "연도별 기록" },
   { href: "/korea", label: "한반도 접근" },
@@ -11,7 +9,7 @@ const links = [
 export function ArchiveLinks() {
   return (
     <nav className="archive-links">
-      {links.map((link) => <Link key={link.href} href={link.href}>{link.label}</Link>)}
+      {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
     </nav>
   );
 }
