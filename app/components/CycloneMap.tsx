@@ -87,7 +87,13 @@ export function CycloneMap({ storm, activePoint }: Props) {
         activeNode.current?.setAttribute("transform", `translate(${active.x} ${active.y})`);
       }
     };
-    map.fitBounds(bounds, { padding: 90, duration: 0, maxZoom: 5 });
+    if (storm.status === "active") {
+      const currentIndex = firstForecastIndex > 0 ? firstForecastIndex - 1 : storm.track.length - 1;
+      const current = storm.track[currentIndex];
+      map.jumpTo({ center: [current.lng, current.lat], zoom: 5.5 });
+    } else {
+      map.fitBounds(bounds, { padding: 90, duration: 0, maxZoom: 5 });
+    }
     map.once("idle", draw);
     map.on("render", draw);
     return () => { map.off("render", draw); };
