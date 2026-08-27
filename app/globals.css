@@ -22,13 +22,20 @@ button, select, input { font: inherit; }
 .observed-point, .forecast-point { fill: #0e2634; stroke-width: 2.5; }
 .forecast-point { stroke: #ffd166; opacity: .8; }
 .intensity-unknown { fill: #2b4351; stroke: #9aafba; }.intensity-depression { fill: #183b51; stroke: #5fceff; }.intensity-storm { fill: #153e3b; stroke: #43d6a3; }.intensity-severe { fill: #4d4124; stroke: #ffd166; }.intensity-typhoon { fill: #54351e; stroke: #ff9f43; }.intensity-very-strong { fill: #562b3d; stroke: #fb7185; }.intensity-violent { fill: #44275a; stroke: #c77dff; }
-.active-marker { color: #25d88e; filter: drop-shadow(0 0 9px rgba(37, 216, 142, .6)); }
-.marker-ping { fill: none; stroke: currentColor; stroke-width: 2; opacity: .6; transform-box: fill-box; transform-origin: center; animation: marker-ping 2.6s cubic-bezier(.22, .61, .36, 1) infinite; }
-.marker-ping:nth-of-type(2) { animation-delay: 1.3s; }
-.marker-halo { fill: rgba(37, 216, 142, .2); fill: color-mix(in srgb, currentColor 20%, transparent); stroke: rgba(255, 255, 255, .88); stroke-width: 2; }
-.marker-core { fill: currentColor; }
-.marker-dot { fill: #f7fffc; }
-@keyframes marker-ping { 0% { transform: scale(.55); opacity: .55; } 100% { transform: scale(2.6); opacity: 0; } }
+.active-marker { filter: drop-shadow(0 0 9px currentColor); }
+.active-marker.intensity-unknown { color: #9aafba; }
+.active-marker.intensity-depression { color: #5fceff; }
+.active-marker.intensity-storm { color: #43d6a3; }
+.active-marker.intensity-severe { color: #ffd166; }
+.active-marker.intensity-typhoon { color: #ff9f43; }
+.active-marker.intensity-very-strong { color: #fb7185; }
+.active-marker.intensity-violent { color: #c77dff; }
+.storm-spiral { transform-box: fill-box; transform-origin: center; animation: storm-spin 5s linear infinite; }
+.spiral-blade { fill: currentColor; }
+.spiral-blade.blade-2, .spiral-blade.blade-3 { opacity: .78; }
+.marker-eye { fill: #0e2634; stroke: currentColor; stroke-width: 1.5; }
+.marker-eye-dot { fill: #f7fffc; }
+@keyframes storm-spin { to { transform: rotate(-360deg); } }
 .storm-range { stroke-width: 1.5; }
 .storm-range.wind { fill: rgba(82, 207, 255, .17); stroke: rgba(117, 227, 255, .9); }
 .storm-range.probability { fill: rgba(255, 201, 91, .10); stroke: rgba(255, 211, 115, .82); stroke-dasharray: 6 5; }
@@ -178,3 +185,7 @@ button, select, input { font: inherit; }
 .map-empty { display: grid; place-content: center; justify-items: center; gap: 8px; height: 100%; padding: 24px; text-align: center; color: #9fb5c1; }
 .map-empty p { margin: 0; color: #d7ebf4; font-size: 17px; font-weight: 650; }
 .map-empty span { max-width: 320px; color: #8da9b8; font-size: 13px; line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .storm-spiral { animation: none; }
+}
