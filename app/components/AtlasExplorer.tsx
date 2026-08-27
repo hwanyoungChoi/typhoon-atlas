@@ -20,7 +20,7 @@ export function AtlasExplorer() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
-  const [legendOpen, setLegendOpen] = useState(true);
+  const [legendOpen, setLegendOpen] = useState(false);
 
   useEffect(() => {
     fetch("/data/years/index.json", { cache: "no-store" })
