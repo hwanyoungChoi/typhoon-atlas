@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
-:root { --ink: #eaf3f9; --muted: #a7bdcb; --panel: #102936; --blue: #54d6ff; --line: rgba(201, 231, 245, .16); }
+:root {
+  --ink: #eaf3f9; --muted: #a7bdcb; --panel: #102936; --blue: #54d6ff; --line: rgba(201, 231, 245, .16);
+  /* Shared "liquid glass" surface for the control panels floating over the map. */
+  --glass-bg: linear-gradient(145deg, rgba(22, 58, 76, .58), rgba(9, 30, 43, .48));
+  --glass-border: rgba(255, 255, 255, .22);
+  --glass-blur: blur(26px) saturate(165%);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, .16);
+}
 
 * { box-sizing: border-box; }
 body { margin: 0; background: #102936; color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -38,7 +45,7 @@ button, select, input { font: inherit; }
 .storm-range.probability { fill: rgba(255, 107, 149, .10); stroke: rgba(255, 140, 170, .82); stroke-dasharray: 6 5; }
 .map .maplibregl-ctrl-attrib { font-size: 10px; }
 .left-rail { position: absolute; z-index: 2; top: 18px; left: 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; max-height: calc(100svh - 36px); }
-.sidebar { position: relative; width: 350px; border: 1px solid rgba(190, 235, 255, .26); border-radius: 20px; background: linear-gradient(145deg, rgba(15, 44, 59, .92), rgba(8, 27, 39, .87)); box-shadow: 0 20px 50px rgba(0, 12, 22, .35); backdrop-filter: blur(18px); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar { position: relative; width: 350px; border: 1px solid var(--glass-border); border-radius: 20px; background: var(--glass-bg); box-shadow: 0 20px 50px rgba(0, 12, 22, .35), var(--glass-highlight); backdrop-filter: var(--glass-blur); display: flex; flex-direction: column; overflow: hidden; }
 .brand { display: grid; grid-template-columns: 34px auto; align-items: center; gap: 10px; padding: 25px 23px 20px; }.brand h1 { display: grid; gap: 2px; margin: 0; font-size: 20px; font-weight: 750; letter-spacing: -.8px; }.brand-mark { position: relative; width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #65e0ff, #187fb7); box-shadow: 0 0 19px rgba(91, 218, 255, .38); overflow: hidden; }.brand-mark i { position: absolute; width: 17px; height: 4px; border: 2px solid #103545; border-left: 0; border-radius: 0 8px 8px 0; transform: rotate(-30deg); }.brand-mark i:nth-child(1) { top: 7px; left: 4px; }.brand-mark i:nth-child(2) { top: 13px; left: 8px; transform: rotate(-30deg) scale(.8); }.brand-mark i:nth-child(3) { top: 18px; left: 5px; transform: rotate(-30deg) scale(.55); }.brand small { color: #8da9b8; font-size: 9px; font-weight: 600; letter-spacing: .45px; }
 .filter-row { display: grid; grid-template-columns: .65fr 1.35fr; gap: 10px; padding: 0 20px 18px; }.filter-row label { position: relative; display: grid; gap: 5px; color: #9fb5c1; font-size: 10px; font-weight: 750; letter-spacing: .02em; }.filter-row label::after { position: absolute; top: calc(100% - 21px); right: 14px; width: 6px; height: 6px; border-right: 1.5px solid #79cfe8; border-bottom: 1.5px solid #79cfe8; content: ""; pointer-events: none; transform: translateY(-50%) rotate(45deg); }.filter-row select { appearance: none; padding: 10px 32px 10px 11px; background: rgba(4, 24, 35, .6); border: 1px solid rgba(165, 217, 239, .16); border-radius: 9px; color: #edf8fc; font-weight: 650; font-size: 13px; }.storm-selector { grid-column: 1 / -1; } footer { padding: 12px 20px; color: #7796a6; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.5; } footer a { margin-left: 6px; color: #9edcf0; text-decoration: none; } footer a:hover { text-decoration: underline; }
 /*
@@ -50,13 +57,13 @@ button, select, input { font: inherit; }
  * canvas. Floating it keeps .legend (and left-rail) pinned to the button's
  * own size regardless of open state.
  */
-.legend { position: relative; width: fit-content; border: 1px solid rgba(190, 235, 255, .26); border-radius: 14px; background: linear-gradient(145deg, rgba(15, 44, 59, .92), rgba(8, 27, 39, .87)); box-shadow: 0 16px 40px rgba(0, 12, 22, .32); backdrop-filter: blur(18px); }
+.legend { position: relative; width: fit-content; border: 1px solid var(--glass-border); border-radius: 14px; background: var(--glass-bg); box-shadow: 0 16px 40px rgba(0, 12, 22, .32), var(--glass-highlight); backdrop-filter: var(--glass-blur); }
 .legend-head { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 0; background: transparent; color: #cfe9f4; font-size: 11px; font-weight: 750; text-align: left; cursor: pointer; border-radius: inherit; transition: background .15s ease; }
 .legend-head:hover { background: rgba(56, 131, 159, .12); }
 .legend-head b { position: relative; display: block; width: 13px; height: 13px; }
 .legend-head b::before { position: absolute; top: 2px; left: 3px; width: 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; content: ""; transform: rotate(135deg); transition: transform .2s ease; }
 .legend.is-open .legend-head b::before { top: 4px; transform: rotate(-45deg); }
-.legend-body { position: absolute; z-index: 5; top: calc(100% + 8px); left: 0; width: 210px; max-height: 0; padding: 0 14px; overflow: hidden; opacity: 0; pointer-events: none; border: 1px solid rgba(190, 235, 255, .26); border-radius: 14px; background: linear-gradient(145deg, rgba(15, 44, 59, .97), rgba(8, 27, 39, .95)); box-shadow: 0 16px 40px rgba(0, 12, 22, .32); backdrop-filter: blur(18px); transition: max-height .24s ease, opacity .15s ease, padding .24s ease; }
+.legend-body { position: absolute; z-index: 5; top: calc(100% + 8px); left: 0; width: 210px; max-height: 0; padding: 0 14px; overflow: hidden; opacity: 0; pointer-events: none; border: 1px solid var(--glass-border); border-radius: 14px; background: var(--glass-bg); box-shadow: 0 16px 40px rgba(0, 12, 22, .32), var(--glass-highlight); backdrop-filter: var(--glass-blur); transition: max-height .24s ease, opacity .15s ease, padding .24s ease; }
 .legend.is-open .legend-body { max-height: min(52vh, 420px); padding: 12px 14px 13px; overflow-y: auto; opacity: 1; pointer-events: auto; }
 .legend-body h3 { margin: 13px 0 9px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 10px; color: #9fb5c1; font-weight: 750; letter-spacing: .02em; }
 .legend-lines, .legend-intensity { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
