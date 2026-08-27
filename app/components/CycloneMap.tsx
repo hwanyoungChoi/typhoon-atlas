@@ -19,7 +19,7 @@ maplibregl.setWorkerUrl(maplibreWorkerUrl);
 export function CycloneMap({ storm, activePoint }: Props) {
   const node = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
-  const observedLine = useRef<SVGPolylineElement>(null);
+  const segmentNodes = useRef<(SVGLineElement | null)[]>([]);
   const forecastLine = useRef<SVGPolylineElement>(null);
   const pointNodes = useRef<(SVGCircleElement | null)[]>([]);
   const rangeNodes = useRef<(SVGPolygonElement | null)[]>([]);
@@ -27,6 +27,8 @@ export function CycloneMap({ storm, activePoint }: Props) {
   const activePointRef = useRef(activePoint);
   activePointRef.current = activePoint;
   const [isReady, setIsReady] = useState(false);
+  const firstForecastIndex = storm.track.findIndex((point) => point.kind === "forecast");
+  const observedCount = firstForecastIndex < 0 ? storm.track.length : firstForecastIndex;
 
   useEffect(() => {
     if (!node.current || mapRef.current) return;
@@ -61,10 +63,15 @@ export function CycloneMap({ storm, activePoint }: Props) {
     const bounds = storm.track.reduce((result, item) => result.extend([item.lng, item.lat]), new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
     const draw = () => {
       const pixels = coordinates.map((coordinate) => map.project(coordinate));
-      const firstForecast = storm.track.findIndex((point) => point.kind === "forecast");
-      const observedEnd = firstForecast < 0 ? pixels.length : firstForecast;
-      observedLine.current?.setAttribute("points", pixels.slice(0, observedEnd).map((point) => `${point.x},${point.y}`).join(" "));
-      forecastLine.current?.setAttribute("points", firstForecast < 0 ? "" : pixels.slice(Math.max(0, firstForecast - 1)).map((point) => `${point.x},${point.y}`).join(" "));
+      for (let index = 0; index < observedCount - 1; index += 1) {
+        const segment = segmentNodes.current[index];
+        if (!segment) continue;
+        segment.setAttribute("x1", String(pixels[index].x));
+        segment.setAttribute("y1", String(pixels[index].y));
+        segment.setAttribute("x2", String(pixels[index + 1].x));
+        segment.setAttribute("y2", String(pixels[index + 1].y));
+      }
+      forecastLine.current?.setAttribute("points", firstForecastIndex < 0 ? "" : pixels.slice(Math.max(0, firstForecastIndex - 1)).map((point) => `${point.x},${point.y}`).join(" "));
       pixels.forEach((point, index) => {
         pointNodes.current[index]?.setAttribute("cx", String(point.x));
         pointNodes.current[index]?.setAttribute("cy", String(point.y));
@@ -98,17 +105,17 @@ export function CycloneMap({ storm, activePoint }: Props) {
     <div ref={node} className="map" />
     <svg className="track-overlay" aria-hidden="true">
       {storm.track.map((point, index) => point.radiusKm ? <polygon key={`range-${index}`} ref={(element) => { rangeNodes.current[index] = element; }} className={`storm-range ${point.radiusType}`} /> : null)}
-      <polyline ref={observedLine} className="observed-track" />
+      {Array.from({ length: Math.max(0, observedCount - 1) }, (_, index) => (
+        <line key={`segment-${index}`} ref={(element) => { segmentNodes.current[index] = element; }} className={`track-segment ${windIntensity(storm.track[index + 1].wind)}`} />
+      ))}
       <polyline ref={forecastLine} className="forecast-track" />
-      {storm.track.map((point, index) => <circle key={`${point.lng}-${point.lat}-${index}`} ref={(element) => { pointNodes.current[index] = element; }} className={`${point.kind === "forecast" ? "forecast-point" : "observed-point"} ${windIntensity(point.wind)}`} r={point.kind === "forecast" ? 4.5 : 5} />)}
-      <g ref={activeNode} className="active-point">
-        <circle className="active-point-halo" r="17" />
-        <g className="active-cyclone">
-          <path d="M0 -12C8 -12 13 -6 13 0c0 4-3 7-7 7-3 0-5-2-5-4 0-2 2-4 4-3" />
-          <path d="M10 6c-4 7-12 8-17 4-3-2-4-6-2-9 2-2 5-2 6 0 1 2 0 4-2 4" />
-          <path d="M-10 6c-4-7 0-15 7-16 4-1 7 1 8 5 0 3-2 5-4 4-2 0-3-2-2-4" />
-        </g>
-        <circle className="active-point-eye" r="3.5" />
+      {storm.track.map((point, index) => <circle key={`${point.lng}-${point.lat}-${index}`} ref={(element) => { pointNodes.current[index] = element; }} className={`${point.kind === "forecast" ? "forecast-point" : "observed-point"} ${windIntensity(point.wind)}`} r={point.kind === "forecast" ? 3 : 3.5} />)}
+      <g ref={activeNode} className="active-marker">
+        <circle className="marker-ping" r="9" />
+        <circle className="marker-ping" r="9" />
+        <circle className="marker-halo" r="13" />
+        <circle className="marker-core" r="6" />
+        <circle className="marker-dot" r="2.5" />
       </g>
     </svg>
   </div>;

@@ -10,14 +10,25 @@ button, select, input { font: inherit; }
 .map-area, .map-shell { position: absolute; inset: 0; }
 .map.maplibregl-map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .track-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-.observed-track, .forecast-track { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.observed-track { stroke: #69e1ff; stroke-width: 4.5; filter: drop-shadow(0 0 7px rgba(78, 213, 255, .72)); }
-.forecast-track { stroke: #ffd166; stroke-width: 4; stroke-dasharray: 9 8; filter: drop-shadow(0 0 5px rgba(255, 209, 102, .55)); }
-.observed-point, .forecast-point { fill: #132d3b; stroke-width: 3.5; }
-.observed-point { stroke: #69e1ff; }
-.forecast-point { stroke: #ffd166; }
-.intensity-unknown { fill: #2b4351; stroke: #9aafba; }.intensity-depression { fill: #183b51; stroke: #57c7ff; }.intensity-storm { fill: #153e3b; stroke: #43d6a3; }.intensity-severe { fill: #4d4124; stroke: #ffd166; }.intensity-typhoon { fill: #54351e; stroke: #ff9f43; }.intensity-very-strong { fill: #562b3d; stroke: #fb7185; }.intensity-violent { fill: #44275a; stroke: #c77dff; }
-.active-point { filter: drop-shadow(0 0 10px rgba(34, 208, 138, .95)); }.active-point-halo { fill: rgba(34, 208, 138, .22); stroke: rgba(213, 255, 240, .9); stroke-width: 2; }.active-cyclone { fill: none; stroke: #25d88e; stroke-linecap: round; stroke-width: 4.5; animation: cyclone-spin 3.5s linear infinite; transform-box: fill-box; transform-origin: center; }.active-point-eye { fill: #f7fffc; stroke: #25d88e; stroke-width: 2; }@keyframes cyclone-spin { to { transform: rotate(360deg); } }
+.track-segment { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 4.5; transition: stroke .15s ease; }
+.track-segment.intensity-unknown { stroke: #7a95a3; filter: drop-shadow(0 0 4px rgba(122, 149, 163, .35)); }
+.track-segment.intensity-depression { stroke: #5fceff; filter: drop-shadow(0 0 5px rgba(95, 206, 255, .5)); }
+.track-segment.intensity-storm { stroke: #43d6a3; filter: drop-shadow(0 0 5px rgba(67, 214, 163, .5)); }
+.track-segment.intensity-severe { stroke: #ffd166; filter: drop-shadow(0 0 6px rgba(255, 209, 102, .55)); }
+.track-segment.intensity-typhoon { stroke: #ff9f43; filter: drop-shadow(0 0 7px rgba(255, 159, 67, .6)); }
+.track-segment.intensity-very-strong { stroke: #fb7185; filter: drop-shadow(0 0 7px rgba(251, 113, 133, .65)); }
+.track-segment.intensity-violent { stroke: #c77dff; filter: drop-shadow(0 0 8px rgba(199, 125, 255, .72)); }
+.forecast-track { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke: #ffd166; stroke-width: 3.5; stroke-dasharray: 2 9; opacity: .85; filter: drop-shadow(0 0 5px rgba(255, 209, 102, .45)); }
+.observed-point, .forecast-point { fill: #0e2634; stroke-width: 2.5; }
+.forecast-point { stroke: #ffd166; opacity: .8; }
+.intensity-unknown { fill: #2b4351; stroke: #9aafba; }.intensity-depression { fill: #183b51; stroke: #5fceff; }.intensity-storm { fill: #153e3b; stroke: #43d6a3; }.intensity-severe { fill: #4d4124; stroke: #ffd166; }.intensity-typhoon { fill: #54351e; stroke: #ff9f43; }.intensity-very-strong { fill: #562b3d; stroke: #fb7185; }.intensity-violent { fill: #44275a; stroke: #c77dff; }
+.active-marker { color: #25d88e; filter: drop-shadow(0 0 9px rgba(37, 216, 142, .6)); }
+.marker-ping { fill: none; stroke: currentColor; stroke-width: 2; opacity: .6; transform-box: fill-box; transform-origin: center; animation: marker-ping 2.6s cubic-bezier(.22, .61, .36, 1) infinite; }
+.marker-ping:nth-of-type(2) { animation-delay: 1.3s; }
+.marker-halo { fill: rgba(37, 216, 142, .2); fill: color-mix(in srgb, currentColor 20%, transparent); stroke: rgba(255, 255, 255, .88); stroke-width: 2; }
+.marker-core { fill: currentColor; }
+.marker-dot { fill: #f7fffc; }
+@keyframes marker-ping { 0% { transform: scale(.55); opacity: .55; } 100% { transform: scale(2.6); opacity: 0; } }
 .storm-range { stroke-width: 1.5; }
 .storm-range.wind { fill: rgba(82, 207, 255, .17); stroke: rgba(117, 227, 255, .9); }
 .storm-range.probability { fill: rgba(255, 201, 91, .10); stroke: rgba(255, 211, 115, .82); stroke-dasharray: 6 5; }
