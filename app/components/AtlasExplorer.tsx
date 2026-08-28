@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { fetchJmaLiveStorms } from "../data/jma-live";
@@ -10,9 +10,17 @@ import { ArchiveLinks } from "./ArchiveLinks";
 import { CycloneMap } from "./CycloneMap";
 
 export function AtlasExplorer() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const requestedYear = Number(searchParams.get("year")) || null;
-  const requestedStorm = searchParams.get("storm");
+  // Captured once: a link like /?year=2022&storm=... should seed the initial
+  // selection, but must not keep re-triggering fetches once we start writing
+  // the *current* selection back into the URL below (that would refetch on
+  // every pick and flash the loading screen).
+  const [{ requestedYear, requestedStorm }] = useState(() => ({
+    requestedYear: Number(searchParams.get("year")) || null,
+    requestedStorm: searchParams.get("storm"),
+  }));
   const [years, setYears] = useState<number[]>([]);
   const [year, setYear] = useState<number | null>(null);
   const [stormYear, setStormYear] = useState<StormYear | null>(null);
@@ -56,6 +64,16 @@ export function AtlasExplorer() {
   }, [selectedId, selectedStorm]);
 
   useEffect(() => { if (selectedStorm) setActivePoint(defaultPoint(selectedStorm)); }, [selectedStorm?.id]);
+
+  // Keep the URL in sync with the current selection so it's always
+  // shareable, not just when someone arrived via a ?year=&storm= link.
+  useEffect(() => {
+    if (year === null) return;
+    const params = new URLSearchParams();
+    params.set("year", String(year));
+    if (selectedStorm) params.set("storm", selectedStorm.id);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [pathname, router, year, selectedStorm?.id]);
 
   function selectStorm(storm: Storm) { setSelectedId(storm.id); setActivePoint(defaultPoint(storm)); }
   function selectBasin(nextBasin: Basin) { setBasin(nextBasin); const nextStorm = stormYear?.storms.find((storm) => nextBasin === "all" || storm.basin === nextBasin); setSelectedId(nextStorm?.id ?? null); }
