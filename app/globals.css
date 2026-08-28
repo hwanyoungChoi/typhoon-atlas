@@ -3,7 +3,7 @@
 :root {
   --ink: #eaf3f9; --muted: #a7bdcb; --panel: #102936; --blue: #54d6ff; --line: rgba(201, 231, 245, .16);
   /* Shared "liquid glass" surface for the control panels floating over the map. */
-  --glass-bg: linear-gradient(145deg, rgba(22, 58, 76, .58), rgba(9, 30, 43, .48));
+  --glass-bg: linear-gradient(145deg, rgba(20, 52, 68, .82), rgba(8, 27, 39, .78));
   --glass-border: rgba(255, 255, 255, .22);
   --glass-blur: blur(26px) saturate(165%);
   --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, .16);
