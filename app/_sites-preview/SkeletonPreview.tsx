@@ -40,17 +40,10 @@ export function SkeletonPreview() {
 
         <div className="sites-skeleton-shell" aria-hidden="true">
           <aside className="sites-skeleton-sidebar">
-            <Skeleton
-              width={66}
-              height={10}
-              containerClassName="sites-skeleton-sidebar-heading"
-            />
+            <Skeleton width={66} height={10} containerClassName="sites-skeleton-sidebar-heading" />
             <div className="sites-skeleton-sidebar-list">
               {sidebarWidths.map((width, index) => (
-                <div
-                  className="sites-skeleton-sidebar-row"
-                  key={`${width}-${index}`}
-                >
+                <div className="sites-skeleton-sidebar-row" key={`${width}-${index}`}>
                   <Skeleton width={18} height={18} borderRadius={5} />
                   <Skeleton width={`${width}%`} height={10} />
                 </div>
@@ -63,10 +56,7 @@ export function SkeletonPreview() {
             />
             <div className="sites-skeleton-sidebar-list">
               {sidebarWidths.slice(0, 3).map((width, index) => (
-                <div
-                  className="sites-skeleton-sidebar-row"
-                  key={`secondary-${width}-${index}`}
-                >
+                <div className="sites-skeleton-sidebar-row" key={`secondary-${width}-${index}`}>
                   <Skeleton width={18} height={18} borderRadius={5} />
                   <Skeleton width={`${width - 12}%`} height={10} />
                 </div>
@@ -93,20 +83,12 @@ export function SkeletonPreview() {
                 <Skeleton width={116} height={10} />
                 <Skeleton width={82} height={8} />
               </div>
-              <Skeleton
-                width={76}
-                height={10}
-                containerClassName="sites-skeleton-article-date"
-              />
+              <Skeleton width={76} height={10} containerClassName="sites-skeleton-article-date" />
             </div>
 
             <div className="sites-skeleton-article-copy">
               {articleWidths.map((width, index) => (
-                <Skeleton
-                  key={`${width}-${index}`}
-                  width={`${width}%`}
-                  height={10}
-                />
+                <Skeleton key={`${width}-${index}`} width={`${width}%`} height={10} />
               ))}
             </div>
           </article>
@@ -133,9 +115,7 @@ export function SkeletonPreview() {
           aria-live="polite"
           aria-atomic="true"
         >
-          <span className="sites-skeleton-status-kicker">
-            Building your site
-          </span>
+          <span className="sites-skeleton-status-kicker">Building your site</span>
           <h1>Your site is taking shape</h1>
           <p>Your first version will appear here automatically when it’s ready.</p>
         </section>

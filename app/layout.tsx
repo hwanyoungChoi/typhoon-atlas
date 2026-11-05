@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+
+import type { Metadata } from "next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,7 +20,8 @@ export const metadata: Metadata = {
     default: "태풍 경로 · 과거 태풍 경로 지도 | Typhoon Atlas",
     template: "%s | Typhoon Atlas",
   },
-  description: "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별 지도와 표로 확인하세요. 1951년 이후 태풍 전체와 한반도에 접근한 태풍, 역대 최강 태풍 순위를 제공합니다.",
+  description:
+    "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별 지도와 표로 확인하세요. 1951년 이후 태풍 전체와 한반도에 접근한 태풍, 역대 최강 태풍 순위를 제공합니다.",
   alternates: { canonical: "/" },
   robots: {
     index: true,
@@ -57,9 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Script
           async
           crossOrigin="anonymous"
@@ -77,14 +77,35 @@ export default function RootLayout({
               alternateName: ["태풍 경로 지도", "과거 태풍 경로 지도", "역대 태풍 기록"],
               url: "https://typhoon.conychoi.dev/",
               inLanguage: "ko-KR",
-              description: "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별로 탐색하는 전 세계 태풍 지도",
+              description:
+                "태풍 경로, 과거 태풍 경로, 역대 태풍 기록을 연도별로 탐색하는 전 세계 태풍 지도",
               publisher: { "@type": "Person", name: "최환영" },
               hasPart: [
-                { "@type": "WebPage", name: "연도별 태풍 경로 아카이브", url: "https://typhoon.conychoi.dev/typhoon" },
-                { "@type": "WebPage", name: "한반도에 접근한 역대 태풍", url: "https://typhoon.conychoi.dev/korea" },
-                { "@type": "WebPage", name: "역대 최강 태풍 순위", url: "https://typhoon.conychoi.dev/ranking" },
-                { "@type": "WebPage", name: "태풍 이름 목록과 사용 이력", url: "https://typhoon.conychoi.dev/names" },
-                { "@type": "WebPage", name: "태풍 정보 읽는 법", url: "https://typhoon.conychoi.dev/guide" },
+                {
+                  "@type": "WebPage",
+                  name: "연도별 태풍 경로 아카이브",
+                  url: "https://typhoon.conychoi.dev/typhoon",
+                },
+                {
+                  "@type": "WebPage",
+                  name: "한반도에 접근한 역대 태풍",
+                  url: "https://typhoon.conychoi.dev/korea",
+                },
+                {
+                  "@type": "WebPage",
+                  name: "역대 최강 태풍 순위",
+                  url: "https://typhoon.conychoi.dev/ranking",
+                },
+                {
+                  "@type": "WebPage",
+                  name: "태풍 이름 목록과 사용 이력",
+                  url: "https://typhoon.conychoi.dev/names",
+                },
+                {
+                  "@type": "WebPage",
+                  name: "태풍 정보 읽는 법",
+                  url: "https://typhoon.conychoi.dev/guide",
+                },
               ],
             }),
           }}

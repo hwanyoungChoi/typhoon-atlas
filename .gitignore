@@ -38,3 +38,9 @@ yarn-error.log*
 /.wrangler/
 /outputs/
 /work/
+
+# lint-staged · playwright · cony
+.eslintcache
+/test-results/
+/playwright-report/
+.cony/.cache/
