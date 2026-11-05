@@ -1,0 +1,10 @@
+dist
+.next
+.vinext
+.wrangler
+public/data
+app/data/generated
+drizzle
+playwright-report
+test-results
+package-lock.json

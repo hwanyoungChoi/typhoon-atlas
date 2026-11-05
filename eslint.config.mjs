@@ -1,40 +1,14 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import eslint from "@eslint/js";
-import next from "@next/eslint-plugin-next";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import nextConfig from "@conychoi/eslint-config/next";
 
-const eslintConfig = defineConfig([
-  globalIgnores([
-    ".next/**",
-    "dist/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  react.configs.flat.recommended,
-  react.configs.flat["jsx-runtime"],
-  reactHooks.configs.flat["recommended-latest"],
-  jsxA11y.flatConfigs.recommended,
-  next.configs["core-web-vitals"],
+export default [
+  ...nextConfig,
+  { ignores: [".vinext/**", ".wrangler/**", "playwright-report/**", "test-results/**"] },
+  // 공용 config 는 build/ 를 산출물로 보고 무시하지만, 여기서는 vite 플러그인 소스다.
+  { ignores: ["!build/**"] },
+  // 공용 config 는 프로젝트마다 다른 경로 alias 를 알지 못한다.
+  // 알려주지 않으면 @/ 가 외부 패키지로 분류되어 import 순서가 컨벤션과 어긋난다.
+  { settings: { "import/internal-regex": "^@/" } },
   {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.serviceworker,
-      },
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
     rules: {
       // vinext's next/link throws "f is not a function" during prefetch setup,
       // which silently kills the click handler. Plain <a> is the working
@@ -42,6 +16,4 @@ const eslintConfig = defineConfig([
       "@next/next/no-html-link-for-pages": "off",
     },
   },
-]);
-
-export default eslintConfig;
+];
