@@ -9,8 +9,7 @@
   overflow: hidden;
   color: var(--sites-skeleton-foreground);
   background:
-    radial-gradient(circle at 50% 16%, #ffffff 0, transparent 34%),
-    var(--sites-skeleton-background);
+    radial-gradient(circle at 50% 16%, #ffffff 0, transparent 34%), var(--sites-skeleton-background);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
@@ -21,11 +20,7 @@
   left: 0;
   z-index: 3;
   height: 220px;
-  background: linear-gradient(
-    to bottom,
-    rgb(251 250 248 / 0.92),
-    rgb(251 250 248 / 0)
-  );
+  background: linear-gradient(to bottom, rgb(251 250 248 / 0.92), rgb(251 250 248 / 0));
   pointer-events: none;
   content: "";
 }
