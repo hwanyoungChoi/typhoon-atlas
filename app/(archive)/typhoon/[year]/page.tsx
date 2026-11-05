@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 
+import { TrackMap } from "../../../components/TrackMap";
+import { intensityClass, intensityLabel, knotToMs } from "../../../data/intensity";
 import {
   basinNames,
   basinTerms,
   formatDate,
-  intensityClass,
-  intensityLabel,
-  knotToMs,
   stormPath,
   stormTitle,
   stormsOfYear,
   subName,
   yearSummaries,
 } from "../../../data/seo-index";
+import { loadYear, toTrackLine } from "../../../data/track-source";
 
 import type { Metadata } from "next";
 
@@ -56,6 +56,14 @@ export default async function YearPage({ params }: Params) {
   const basins = (["WP", "EP", "NA"] as const).filter((basin) =>
     storms.some((storm) => storm.b === basin),
   );
+  // One basin per map: tracks from opposite sides of the globe would shrink
+  // each other to nothing. The first basin is the typhoon one when there is one.
+  const mapBasin = basins[0];
+  const mapLines =
+    (await loadYear(year))?.storms
+      .filter((storm) => storm.basin === mapBasin)
+      .map(toTrackLine)
+      .filter((line) => line.points.length > 1) ?? [];
 
   return (
     <main className="doc-main">
@@ -74,6 +82,13 @@ export default async function YearPage({ params }: Params) {
             ? ` 그해 가장 강했던 것은 중심기압 ${strongest.pp}hPa까지 발달한 ${stormTitle(strongest)}입니다.`
             : ""}
         </p>
+
+        {mapLines.length > 0 && (
+          <TrackMap
+            lines={mapLines}
+            caption={`${year}년 ${basinNames[mapBasin]} ${basinTerms[mapBasin]} ${mapLines.length}개의 경로. 선의 색은 그 구간의 강도입니다.`}
+          />
+        )}
 
         <p className="year-jump">
           {previous && <a href={`/typhoon/${previous}`}>← {previous}년</a>}

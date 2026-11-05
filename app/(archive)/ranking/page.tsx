@@ -1,11 +1,9 @@
+import { intensityClass, intensityLabel, knotToMs } from "../../data/intensity";
 import {
   allStorms,
   basinNames,
   basinTerms,
   formatDate,
-  intensityClass,
-  intensityLabel,
-  knotToMs,
   stormPath,
   stormTitle,
   subName,

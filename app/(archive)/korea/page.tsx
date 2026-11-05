@@ -1,13 +1,6 @@
-import {
-  allStorms,
-  formatDate,
-  intensityClass,
-  intensityLabel,
-  knotToMs,
-  stormPath,
-  stormTitle,
-  subName,
-} from "../../data/seo-index";
+import { TrackMap } from "../../components/TrackMap";
+import { intensityClass, intensityLabel, knotToMs } from "../../data/intensity";
+import { allStorms, formatDate, stormPath, stormTitle, subName } from "../../data/seo-index";
 
 import type { Metadata } from "next";
 
@@ -45,6 +38,9 @@ export default function KoreaPage() {
       );
   const months = [...byMonth.entries()].sort((a, b) => a[0] - b[0]);
   const peakMonth = [...months].sort((a, b) => b[1] - a[1])[0];
+  const marks = approached.flatMap((storm) =>
+    storm.kp ? [{ id: storm.id, lat: storm.kp[0], lng: storm.kp[1], wind: storm.pw }] : [],
+  );
 
   return (
     <main className="doc-main">
@@ -56,6 +52,11 @@ export default function KoreaPage() {
           거리로, 상륙 여부나 피해 규모를 판정한 값이 아닙니다. 실제 영향은 태풍의 크기, 이동 속도,
           진행 방향에 따라 크게 달라집니다.
         </p>
+
+        <TrackMap
+          marks={marks}
+          caption={`${marks.length}개 태풍이 한반도에 가장 가까이 왔던 지점. 점의 색은 그 태풍의 최대 강도입니다.`}
+        />
 
         <section>
           <h2>가장 가깝게 지난 태풍 40개</h2>

@@ -89,6 +89,12 @@ function summarize(storm) {
     d: round(points.at(-1)),
     kr: distances.length ? Math.round(Math.min(...distances)) : null,
     kt: distances.length ? points[nearestIndex].time : null,
+    // Where that closest approach happened, kept only for storms close enough
+    // to be drawn on the Korea page so the worker bundle stays small.
+    kp:
+      distances.length && distances[nearestIndex] <= 400
+        ? [points[nearestIndex].lat, points[nearestIndex].lng]
+        : null,
   };
 }
 

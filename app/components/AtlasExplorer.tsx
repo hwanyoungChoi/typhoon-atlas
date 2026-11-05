@@ -1,10 +1,12 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ArchiveLinks } from "./ArchiveLinks";
 import { CycloneMap } from "./CycloneMap";
+import { StormSummary } from "./StormSummary";
+import { intensityScale } from "../data/intensity";
 import { fetchJmaLiveStorms } from "../data/jma-live";
 import { basinLabels, type Basin, type Storm, type StormYear } from "../data/storms";
 import { displayStormName } from "../data/typhoon-names-ko";
@@ -29,6 +31,18 @@ export function AtlasExplorer() {
   const [activePoint, setActivePoint] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [legendOpen, setLegendOpen] = useState(false);
+  const railRef = useRef<HTMLDivElement>(null);
+
+  // The control rail floats over the map: beside it on wide screens, across
+  // the top on phones. Tell the map which edge it covers.
+  function coveredInset() {
+    const rail = railRef.current?.getBoundingClientRect();
+    const none = { top: 0, right: 0, bottom: 0, left: 0 };
+    if (!rail) return none;
+    return rail.width > window.innerWidth * 0.6
+      ? { ...none, top: rail.bottom }
+      : { ...none, left: rail.right };
+  }
 
   useEffect(() => {
     fetch("/data/years/index.json", { cache: "no-store" })
@@ -124,7 +138,7 @@ export function AtlasExplorer() {
     <main className="app-shell">
       <section className="map-area">
         {selectedStorm ? (
-          <CycloneMap storm={selectedStorm} activePoint={activePoint} />
+          <CycloneMap storm={selectedStorm} activePoint={activePoint} coveredInset={coveredInset} />
         ) : (
           <div className="map-empty">
             <p>
@@ -136,7 +150,7 @@ export function AtlasExplorer() {
           </div>
         )}
       </section>
-      <div className="left-rail">
+      <div className="left-rail" ref={railRef}>
         <aside className={`sidebar ${filtersOpen ? "is-open" : ""}`}>
           <header className="brand">
             <span className="brand-mark">
@@ -203,11 +217,14 @@ export function AtlasExplorer() {
                 </label>
               )}
             </div>
-            <footer>
-              <ArchiveLinks />
-              현재·예보: 일본 기상청 방재정보 · 과거 확정 경로: JMA RSMC Tokyo / NOAA NHC{" "}
+          </div>
+          {selectedStorm && <StormSummary storm={selectedStorm} />}
+          <div className="rail-foot">
+            <ArchiveLinks />
+            <p>
+              데이터: 일본 기상청 방재정보 · JMA RSMC Tokyo · NOAA NHC{" "}
               <a href="/privacy">개인정보처리방침</a>
-            </footer>
+            </p>
           </div>
         </aside>
         {selectedStorm && (
@@ -225,7 +242,7 @@ export function AtlasExplorer() {
               <ul className="legend-lines">
                 <li>
                   <span className="line-swatch" />
-                  관측·분석 경로
+                  관측·분석 경로 (색은 강도)
                 </li>
                 {selectedStorm.status === "active" && (
                   <li>
@@ -279,15 +296,6 @@ export function AtlasExplorer() {
     </main>
   );
 }
-
-const intensityScale = [
-  { cls: "depression", label: "열대저압부", range: "34kt 미만" },
-  { cls: "storm", label: "열대폭풍", range: "34~47kt" },
-  { cls: "severe", label: "강한 열대폭풍", range: "48~63kt" },
-  { cls: "typhoon", label: "태풍(중)", range: "64~84kt" },
-  { cls: "very-strong", label: "매우 강한 태풍", range: "85~104kt" },
-  { cls: "violent", label: "맹렬한 태풍", range: "105kt 이상" },
-];
 
 function defaultPoint(storm: Storm) {
   const firstForecast = storm.track.findIndex((point) => point.kind === "forecast");

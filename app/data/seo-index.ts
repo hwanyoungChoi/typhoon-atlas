@@ -23,6 +23,8 @@ export type IndexedStorm = {
   /** Closest approach to the Korean peninsula in km, from the best-track positions. */
   kr: number | null;
   kt: string | null;
+  /** [lat, lng] of that closest approach, for storms within 400km. */
+  kp: [number, number] | null;
 };
 
 export type YearSummary = { year: number; WP: number; EP: number; NA: number; korea: number };
@@ -99,32 +101,6 @@ export const basinTerms: Record<Exclude<Basin, "all">, string> = {
   EP: "허리케인",
   NA: "허리케인",
 };
-
-/** JMA intensity classes, expressed in the 10-minute mean wind the best track carries. */
-export function intensityLabel(wind: number | null) {
-  if (wind === null) return "기록 없음";
-  if (wind < 34) return "열대저압부";
-  if (wind < 48) return "열대폭풍";
-  if (wind < 64) return "강한 열대폭풍";
-  if (wind < 85) return "태풍(중)";
-  if (wind < 105) return "매우 강한 태풍";
-  return "맹렬한 태풍";
-}
-
-export function intensityClass(wind: number | null) {
-  if (wind === null) return "unknown";
-  if (wind < 34) return "depression";
-  if (wind < 48) return "storm";
-  if (wind < 64) return "severe";
-  if (wind < 85) return "typhoon";
-  if (wind < 105) return "very-strong";
-  return "violent";
-}
-
-/** kt → m/s, the unit Korean forecasts use for maximum wind. */
-export function knotToMs(wind: number | null) {
-  return wind === null ? null : Math.round(wind * 0.514444);
-}
 
 export function formatDate(value: string | null) {
   if (!value) return "기록 없음";

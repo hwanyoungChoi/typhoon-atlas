@@ -1,24 +1,22 @@
 "use client";
 
-import * as maplibregl from "maplibre-gl";
-import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { useEffect, useRef, useState } from "react";
 
-import "maplibre-gl/dist/maplibre-gl.css";
+import { baseMapOptions, maplibregl } from "./mapSetup";
+import { intensityClass } from "../data/intensity";
 import { displayStormName } from "../data/typhoon-names-ko";
 
 import type { Storm } from "../data/storms";
 
-type Props = { storm: Storm; activePoint: number };
-const mapAssetOrigin = "https://tiles.openfreemap.org/";
-const useMapProxy = process.env.NODE_ENV === "production";
-const mapStyle = useMapProxy ? "/map-assets/styles/fiord" : `${mapAssetOrigin}styles/fiord`;
+type Inset = { top: number; right: number; bottom: number; left: number };
+type Props = {
+  storm: Storm;
+  activePoint: number;
+  /** The part of the map covered by floating controls, so fitting avoids it. */
+  coveredInset?: () => Inset;
+};
 
-// Vinext does not automatically copy MapLibre's sibling worker module into
-// Cloudflare's static asset bundle. Importing its URL makes Vite emit it.
-maplibregl.setWorkerUrl(maplibreWorkerUrl);
-
-export function CycloneMap({ storm, activePoint }: Props) {
+export function CycloneMap({ storm, activePoint, coveredInset }: Props) {
   const node = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const segmentNodes = useRef<(SVGLineElement | null)[]>([]);
@@ -35,19 +33,11 @@ export function CycloneMap({ storm, activePoint }: Props) {
   useEffect(() => {
     if (!node.current || mapRef.current) return;
     const map = new maplibregl.Map({
+      ...baseMapOptions,
       container: node.current,
-      style: mapStyle,
       center: [128, 20],
       zoom: 1.8,
-      attributionControl: true,
       renderWorldCopies: false,
-      transformRequest: useMapProxy
-        ? (url) => ({
-            url: url.startsWith(mapAssetOrigin)
-              ? `/map-assets/${url.slice(mapAssetOrigin.length)}`
-              : url,
-          })
-        : undefined,
     });
     map.addControl(new maplibregl.NavigationControl(), "top-right");
     map.on("load", () => {
@@ -108,12 +98,19 @@ export function CycloneMap({ storm, activePoint }: Props) {
         activeNode.current?.setAttribute("transform", `translate(${active.x} ${active.y})`);
       }
     };
+    const covered = coveredInset?.() ?? { top: 0, right: 0, bottom: 0, left: 0 };
+    const padding = {
+      top: covered.top + 60,
+      right: covered.right + 60,
+      bottom: covered.bottom + 60,
+      left: covered.left + 60,
+    };
     if (storm.status === "active") {
       const currentIndex = firstForecastIndex > 0 ? firstForecastIndex - 1 : storm.track.length - 1;
       const current = storm.track[currentIndex];
-      map.jumpTo({ center: [current.lng, current.lat], zoom: 5.5 });
+      map.jumpTo({ center: [current.lng, current.lat], zoom: 5.5, padding });
     } else {
-      map.fitBounds(bounds, { padding: 90, duration: 0, maxZoom: 5 });
+      map.fitBounds(bounds, { padding, duration: 0, maxZoom: 5 });
     }
     map.once("idle", draw);
     map.on("render", draw);
@@ -184,13 +181,7 @@ export function CycloneMap({ storm, activePoint }: Props) {
 }
 
 function windIntensity(wind: number | null) {
-  if (wind === null) return "intensity-unknown";
-  if (wind < 34) return "intensity-depression";
-  if (wind < 48) return "intensity-storm";
-  if (wind < 64) return "intensity-severe";
-  if (wind < 85) return "intensity-typhoon";
-  if (wind < 105) return "intensity-very-strong";
-  return "intensity-violent";
+  return `intensity-${intensityClass(wind)}`;
 }
 
 function circleCoordinates(

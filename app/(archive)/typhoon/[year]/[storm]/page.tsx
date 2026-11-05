@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { TrackMap } from "../../../../components/TrackMap";
+import { intensityClass, intensityLabel, knotToMs } from "../../../../data/intensity";
 import {
   allStorms,
   basinNames,
@@ -9,10 +11,7 @@ import {
   findStorm,
   formatDate,
   formatTime,
-  intensityClass,
-  intensityLabel,
   isIndexable,
-  knotToMs,
   stormPath,
   stormSlug,
   stormTitle,
@@ -20,7 +19,7 @@ import {
   type IndexedStorm,
   type Snapshot,
 } from "../../../../data/seo-index";
-import { loadStormTrack } from "../../../../data/track-source";
+import { loadStormTrack, toTrackLine } from "../../../../data/track-source";
 import { displayStormName } from "../../../../data/typhoon-names-ko";
 
 import type { Metadata } from "next";
@@ -86,6 +85,13 @@ export default async function StormPage({ params }: Params) {
             storm.kr <= 500 &&
             ` 한반도에는 최소 약 ${storm.kr}km까지 접근했습니다.`}
         </p>
+
+        {detail && track.length > 1 && (
+          <TrackMap
+            lines={[toTrackLine(detail)]}
+            caption={`${stormTitle(storm)}의 관측 경로. 선의 색은 그 구간의 강도입니다.`}
+          />
+        )}
 
         <dl className="facts">
           <div>
