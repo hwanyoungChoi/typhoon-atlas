@@ -1,0 +1,2 @@
+{"ts":"2026-11-25T12:37:56.085Z","type":"hook","hook":"verify-on-stop","decision":"block","attempts":1}
+{"ts":"2026-11-25T12:50:30.932Z","type":"hook","hook":"guard-bash","decision":"deny","command":"T='\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>'\nc() { msg=\"$1\"; shift; git add -A -- \"$@\" && git commit -q -m \"$msg$T\" && git log --oneline -1 || { echo \"FAILED: $msg\"; return 1; }; }\nc "}
