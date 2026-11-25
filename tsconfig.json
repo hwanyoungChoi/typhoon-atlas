@@ -15,7 +15,8 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
   },
   "include": [
     "next-env.d.ts",
@@ -25,5 +26,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "worker", "db", "examples"],
+  "references": [
+    {
+      "path": "./tsconfig.worker.json"
+    }
+  ]
 }

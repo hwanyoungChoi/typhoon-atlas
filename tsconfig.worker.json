@@ -1,0 +1,15 @@
+{
+  // Cloudflare Workers 런타임 코드. Workers 타입은 전역 Request·Response 를 바꾸므로
+  // 브라우저 코드와 섞이지 않게 별도 프로젝트로 검사한다.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "outDir": "./node_modules/.tmp/worker",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
+    "types": ["@cloudflare/workers-types", "vite/client"]
+  },
+  "include": ["worker", "db", "examples"],
+  "exclude": ["node_modules"]
+}
