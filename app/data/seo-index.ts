@@ -1,6 +1,7 @@
 import indexData from "./generated/storm-index.json";
-import type { Basin } from "./storms";
 import { displayStormName } from "./typhoon-names-ko";
+
+import type { Basin } from "./storms";
 
 /** Genesis / peak / dissipation snapshot: [lat, lng, wind, pressure, time]. */
 export type Snapshot = [number, number, number | null, number | null, string];
@@ -26,7 +27,11 @@ export type IndexedStorm = {
 
 export type YearSummary = { year: number; WP: number; EP: number; NA: number; korea: number };
 
-const index = indexData as unknown as { builtAt: string; years: YearSummary[]; storms: IndexedStorm[] };
+const index = indexData as unknown as {
+  builtAt: string;
+  years: YearSummary[];
+  storms: IndexedStorm[];
+};
 
 export const builtAt = index.builtAt;
 export const yearSummaries = index.years;
@@ -50,7 +55,11 @@ export function findStorm(year: number, slug: string) {
 export function stormSlug(storm: IndexedStorm) {
   const agency = /^[A-Z]{2}\d/.test(storm.id) ? storm.id.slice(0, 2).toLowerCase() : "wp";
   const number = String(storm.no).replace(/\D/g, "") || "0";
-  const name = storm.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unnamed";
+  const name =
+    storm.n
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "unnamed";
   return `${agency}-${number}-${name}`;
 }
 
@@ -139,5 +148,7 @@ export function durationDays(storm: IndexedStorm) {
   if (!storm.s || !storm.e) return null;
   const start = Date.parse(`${storm.s}T00:00:00Z`);
   const end = Date.parse(`${storm.e}T00:00:00Z`);
-  return Number.isNaN(start) || Number.isNaN(end) ? null : Math.max(1, Math.round((end - start) / 86400000) + 1);
+  return Number.isNaN(start) || Number.isNaN(end)
+    ? null
+    : Math.max(1, Math.round((end - start) / 86400000) + 1);
 }

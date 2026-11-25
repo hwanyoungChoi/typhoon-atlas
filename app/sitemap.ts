@@ -1,6 +1,6 @@
-import type { MetadataRoute } from "next";
-
 import { allStorms, isIndexable, stormPath, yearSummaries } from "./data/seo-index";
+
+import type { MetadataRoute } from "next";
 
 const site = "https://typhoon.conychoi.dev";
 const currentYear = new Date().getFullYear();

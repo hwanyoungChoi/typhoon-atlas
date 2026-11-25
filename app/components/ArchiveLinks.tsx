@@ -9,7 +9,11 @@ const links = [
 export function ArchiveLinks() {
   return (
     <nav className="archive-links">
-      {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
+      {links.map((link) => (
+        <a key={link.href} href={link.href}>
+          {link.label}
+        </a>
+      ))}
     </nav>
   );
 }

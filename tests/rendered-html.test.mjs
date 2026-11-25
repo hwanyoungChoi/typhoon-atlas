@@ -38,10 +38,7 @@ test("server-renders the starter loading skeleton", async () => {
   assert.match(html, /<title>Your site is taking shape<\/title>/i);
   assert.match(html, /Building your site/);
   assert.match(html, /Your site is taking shape/);
-  assert.match(
-    html,
-    /Your first version will appear here automatically when it’s ready\./,
-  );
+  assert.match(html, /Your first version will appear here automatically when it’s ready\./);
   assert.doesNotMatch(html, /Codex/);
   assert.match(html, /react-loading-skeleton/);
   assert.match(html, /role="status"/);
@@ -73,10 +70,7 @@ test("keeps the loading skeleton scoped and disposable", async () => {
   assert.match(css, /opacity:\s*0\.52/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.doesNotMatch(css, /#020617|canvas|pets|progress/i);
-  assert.doesNotMatch(
-    preview,
-    /loading-spinner|status-mark|status-progress|canvas|cookie|random/i,
-  );
+  assert.doesNotMatch(preview, /loading-spinner|status-mark|status-progress|canvas|cookie|random/i);
 
   assert.match(page, /export const metadata:\s*Metadata/);
   assert.match(page, /"codex-preview": "development"/);
@@ -85,7 +79,5 @@ test("keeps the loading skeleton scoped and disposable", async () => {
   assert.doesNotMatch(layout, /codex-preview|_sites-preview|themeColor|\bViewport\b/);
   assert.doesNotMatch(css, /(^|\s)(html|body)\s*\{/m);
 
-  await assert.rejects(
-    access(new URL("public/_sites-preview", templateRoot)),
-  );
+  await assert.rejects(access(new URL("public/_sites-preview", templateRoot)));
 });
